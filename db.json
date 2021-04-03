@@ -1,0 +1,116 @@
+{
+    "food": {
+        "status": 1,
+        "foods": [
+            {
+                "images": [
+                    "https://i1.wp.com/www.eatthis.com/wp-content/uploads/2020/12/unhealthiest-foods-planet.jpg?resize=640%2C360&ssl=1"
+                ],
+                "_id": "58",
+                "name": "46",
+                "description": "783",
+                "price": 7834.0,
+                "rating": 2,
+                "shop": {
+                    "_id": "48",
+                    "name": "hihi",
+                    "email": "mail@mail.com"
+                },
+                "createdAt": "2018-01-01 06:07:59",
+                "updatedAt": "2020-01-01 06:07:59",
+                "__v": 58
+            },
+            {
+                "images": [
+                    "https://i1.wp.com/www.eatthis.com/wp-content/uploads/2020/12/unhealthiest-foods-planet.jpg?resize=640%2C360&ssl=1"
+                ],
+                "_id": "5858",
+                "name": "646746",
+                "description": "783",
+                "price": 7834.0,
+                "rating": 2,
+                "shop": {
+                    "_id": "48",
+                    "name": "hihi",
+                    "email": "mail@mail.com"
+                },
+                "createdAt": "2018-01-01 06:07:59",
+                "updatedAt": "2020-01-01 06:07:59",
+                "__v": 58
+            }
+        ]
+    },
+    "order": {
+        "status": 1,
+        "message": "Thang cho, may lua bo may",
+        "order": [
+            {
+                "_id": "696969",
+                "order_date": "2018-01-01 06:07:59",
+                "items": [
+                    {
+                        "_id": "6969",
+                        "food": {
+                            "images": [
+                                "https://i1.wp.com/www.eatthis.com/wp-content/uploads/2020/12/unhealthiest-foods-planet.jpg?resize=640%2C360&ssl=1"
+                            ],
+                            "_id": "58",
+                            "name": "46",
+                            "description": "783",
+                            "price": 7834.0,
+                            "rating": 2,
+                            "shop": {
+                                "_id": "48",
+                                "name": "hihi",
+                                "email": "mail@mail.com"
+                            },
+                            "createdAt": "2018-01-01 06:07:59",
+                            "updatedAt": "2020-01-01 06:07:59",
+                            "__v": 58
+                        },
+                        "quantity": 69
+                    }
+                ],
+                "totalPrice": 696969,
+                "shop": {
+                    "_id": "48",
+                    "name": "hihi",
+                    "email": "mail@mail.com"
+                },
+                "customer": {
+                    "_id": "48",
+                    "name": "hihi",
+                    "email": "mail@mail.com"
+                },
+                "createdAt": "2018-01-01 06:07:59",
+                "updatedAt": "2020-01-01 06:07:59"
+            }
+        ]
+    },
+    "user": [
+        {
+            "id": 1,
+            "status": 1,
+            "message": "Lead us to commnunist",
+            "user": {
+                "id": 1,
+                "profile_img": "https://media.vov.vn/uploaded/ql0rp46pywc/2017_11_02/1_lenin_8_youtube_ctqp.jpg",
+                "name": "Bolshevik party's leader",
+                "email": "gmail@lenin.cccp",
+                "phone_number": "+89999999"
+            }
+        },
+        {
+            "id": 2,
+            "status": 1,
+            "message": "Make CCCP great again",
+            "user": {
+                "id": 2,
+                "profile_img": "data:image/jpeg;base64,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",
+                "name": "2nd CCCP's leader -  Go to Gulag",
+                "email": "gmail@statlin.cccp",
+                "phone_number": "+89999999"
+            }
+        }
+    ]
+}
