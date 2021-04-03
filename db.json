@@ -1,0 +1,104 @@
+{
+    "food": {
+        "status": 1,
+        "foods": [
+            {
+                "images": [
+                    "https://i1.wp.com/www.eatthis.com/wp-content/uploads/2020/12/unhealthiest-foods-planet.jpg?resize=640%2C360&ssl=1"
+                ],
+                "_id": "58",
+                "name": "46",
+                "description": "783",
+                "price": 7834.0,
+                "rating": 2,
+                "shop": {
+                    "_id": "48",
+                    "name": "hihi",
+                    "email": "mail@mail.com"
+                },
+                "createdAt": "2018-01-01 06:07:59",
+                "updatedAt": "2020-01-01 06:07:59",
+                "__v": 58
+            },
+            {
+                "images": [
+                    "https://i1.wp.com/www.eatthis.com/wp-content/uploads/2020/12/unhealthiest-foods-planet.jpg?resize=640%2C360&ssl=1"
+                ],
+                "_id": "5858",
+                "name": "646746",
+                "description": "783",
+                "price": 7834.0,
+                "rating": 2,
+                "shop": {
+                    "_id": "48",
+                    "name": "hihi",
+                    "email": "mail@mail.com"
+                },
+                "createdAt": "2018-01-01 06:07:59",
+                "updatedAt": "2020-01-01 06:07:59",
+                "__v": 58
+            }
+        ]
+    },
+    "order": {
+        "status": 1,
+        "message": "Thang cho, may lua bo may",
+        "order": [
+            {
+                "_id": "696969",
+                "order_date": "2018-01-01 06:07:59",
+                "items": [
+                    {
+                        "_id": "6969",
+                        "food": {
+                            "images": [
+                                "https://i1.wp.com/www.eatthis.com/wp-content/uploads/2020/12/unhealthiest-foods-planet.jpg?resize=640%2C360&ssl=1"
+                            ],
+                            "_id": "58",
+                            "name": "46",
+                            "description": "783",
+                            "price": 7834.0,
+                            "rating": 2,
+                            "shop": {
+                                "_id": "48",
+                                "name": "hihi",
+                                "email": "mail@mail.com"
+                            },
+                            "createdAt": "2018-01-01 06:07:59",
+                            "updatedAt": "2020-01-01 06:07:59",
+                            "__v": 58
+                        },
+                        "quantity": 69
+                    }
+                ],
+                "totalPrice": 696969,
+                "shop": {
+                    "_id": "48",
+                    "name": "hihi",
+                    "email": "mail@mail.com"
+                },
+                "customer": {
+                    "_id": "48",
+                    "name": "hihi",
+                    "email": "mail@mail.com"
+                },
+                "createdAt": "2018-01-01 06:07:59",
+                "updatedAt": "2020-01-01 06:07:59"
+            }
+        ]
+    },
+    "user": [
+        {
+            "id": 1,
+            "status": 1,
+            "message": "Lead us to commnunist",
+            "user": {
+                "id": 1,
+                "profile_img": "https://media.vov.vn/uploaded/ql0rp46pywc/2017_11_02/1_lenin_8_youtube_ctqp.jpg",
+                "name": "Bolshevik party's leader",
+                "email": "gmail@lenin.cccp",
+                "phone_number": "+89999999"
+            }
+        }
+    ]
+}
