@@ -16,10 +16,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int value = 1;
+  int value = 0;
 
   Future<FoodModel> foodModels;
-  Future<FoodCategoryModel>  foodCategories;
+  Future<FoodCategoryModel> foodCategories;
 
   Future<FoodModel> fetchAllFoods() async {
     var dio = Dio();
@@ -28,6 +28,24 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       // var response = await dio.get('$BASE_URL/api/foods');
       var response = await dio.get('$BASE_URL/api/food');
+      return FoodModel.fromJson(response.data);
+    } catch (e) {
+      if (e is DioError) {
+        print("Dio Error: " + e.message);
+        throw SocketException(e.message);
+      } else {
+        print("Type error: " + e.toString());
+        throw Exception(e.toString());
+      }
+    }
+  }
+
+  Future<FoodModel> fetchFoodByCate(int categoryId) async {
+    var dio = Dio();
+    dio.options.connectTimeout = 5000;
+    try {
+      // var response = await dio.get('$BASE_URL/api/foods');
+      var response = await dio.get('$BASE_URL/api/category/$categoryId/food');
       return FoodModel.fromJson(response.data);
     } catch (e) {
       if (e is DioError) {
@@ -49,8 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
       var response = await dio.get('$BASE_URL/api/category');
       // print(response.data.toString());
       return FoodCategoryModel.fromJson(response.data);
-          // .toList();
-        // .fromJson(response.data["categories"]);
+      // .toList();
+      // .fromJson(response.data["categories"]);
     } catch (e) {
       if (e is DioError) {
         print("Dio Error: " + e.message);
@@ -147,26 +165,34 @@ class _MyHomePageState extends State<MyHomePage> {
       child: FutureBuilder<FoodCategoryModel>(
         future: foodCategories,
         builder: (BuildContext context, snapshot) {
-          // print(snapshot.data);
           if (snapshot.hasData) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ChoiceChip(
-                selectedColor: mainColor,
-                labelStyle:
-                TextStyle(color: value == 1 ? Colors.white : Colors.black),
-                label: Text(snapshot.data.category[0].name),
-                selected: value == 1,
-                onSelected: (selected) {
-                  setState(() {
-                    value = 1;
-                  });
-                },
-              ),
-            );
-          }else{
-            return Text("hihi");
-          };
+            return ListView(
+                scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
+                children: snapshot.data.categories
+                    .map(
+                      (category) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ChoiceChip(
+                          selectedColor: mainColor,
+                          labelStyle: TextStyle(
+                              color: value ==  category.id? Colors.white : Colors.black),
+                          label: Text(category.name),
+                          selected: value ==  category.id,
+                          onSelected: (selected) {
+                            setState(() {
+                              foodModels = category.id == 0? fetchAllFoods():fetchFoodByCate(category.id);
+                              value =  category.id;
+                            });
+                          },
+                        ),
+                      ),
+                    )
+                    .toList());
+          } else {
+            return Text("Loading");
+          }
+          ;
         },
       ),
       //color: Colors.red,
@@ -208,9 +234,10 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisSpacing: 4,
               crossAxisCount: 2,
               physics: BouncingScrollPhysics(),
-              children: snapshot.data.foods.map((food) {
+              children: snapshot.data.foods.length >0? snapshot.data.foods.map((food) {
                 return FoodCard(food);
-              }).toList(),
+              }).toList():
+              [Text("Nothing to show")],
             );
           } else if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));

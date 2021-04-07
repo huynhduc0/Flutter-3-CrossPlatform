@@ -76,14 +76,14 @@ class FoodCategory{
 class FoodCategoryModel {
   int status;
   String message;
-  List<FoodCategory> category;
+  List<FoodCategory> categories;
 
-  FoodCategoryModel({this.status, this.message, this.category});
+  FoodCategoryModel({this.status, this.message, this.categories});
 
   factory FoodCategoryModel.fromJson(Map<String, dynamic> json) => FoodCategoryModel(
     status: json["status"],
     message: json["message"],
-    category: List<FoodCategory>.from(json["category"].map((x) => Food.fromJson(x))),
+    categories: List<FoodCategory>.from(json["categories"].map((x) => FoodCategory.fromJson(x))),
   );
 }
 enum FoodTypes {
