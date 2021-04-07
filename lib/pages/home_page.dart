@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<List<FoodCategory>> fetchAllCate() async {
+  Future<FoodCategoryModel> fetchAllCate() async {
     var dio = Dio();
     dio.options.connectTimeout = 5000;
     print('lo con chiêm');
@@ -144,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget buildFoodFilter() {
     return Container(
       height: 50,
-      child: FutureBuilder<FoodCategory>(
+      child: FutureBuilder<FoodCategoryModel>(
         future: foodCategories,
         builder: (BuildContext context, snapshot) {
           // print(snapshot.data);
@@ -155,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 selectedColor: mainColor,
                 labelStyle:
                 TextStyle(color: value == 1 ? Colors.white : Colors.black),
-                label: Text(snapshot.data.name),
+                label: Text(snapshot.data.category[0].name),
                 selected: value == 1,
                 onSelected: (selected) {
                   setState(() {
