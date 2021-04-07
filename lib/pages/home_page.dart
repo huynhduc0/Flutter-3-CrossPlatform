@@ -19,15 +19,38 @@ class _MyHomePageState extends State<MyHomePage> {
   int value = 1;
 
   Future<FoodModel> foodModels;
+  Future<FoodCategoryModel>  foodCategories;
 
   Future<FoodModel> fetchAllFoods() async {
     var dio = Dio();
     dio.options.connectTimeout = 5000;
-    print('krappa');
+    print('lo con chiêm');
     try {
       // var response = await dio.get('$BASE_URL/api/foods');
-      var response = await dio.get("http://localhost:3000/food");
+      var response = await dio.get('$BASE_URL/api/food');
       return FoodModel.fromJson(response.data);
+    } catch (e) {
+      if (e is DioError) {
+        print("Dio Error: " + e.message);
+        throw SocketException(e.message);
+      } else {
+        print("Type error: " + e.toString());
+        throw Exception(e.toString());
+      }
+    }
+  }
+
+  Future<List<FoodCategory>> fetchAllCate() async {
+    var dio = Dio();
+    dio.options.connectTimeout = 5000;
+    print('lo con chiêm');
+    try {
+      // var response = await dio.get('$BASE_URL/api/foods');
+      var response = await dio.get('$BASE_URL/api/category');
+      // print(response.data.toString());
+      return FoodCategoryModel.fromJson(response.data);
+          // .toList();
+        // .fromJson(response.data["categories"]);
     } catch (e) {
       if (e is DioError) {
         print("Dio Error: " + e.message);
@@ -56,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     foodModels = fetchAllFoods();
+    foodCategories = fetchAllCate();
     super.initState();
   }
 
@@ -91,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.refresh),
               onPressed: () {
                 foodModels = fetchAllFoods();
+                foodCategories = fetchAllCate();
                 setState(() {});
               }),
           Stack(
@@ -119,28 +144,55 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget buildFoodFilter() {
     return Container(
       height: 50,
-      //color: Colors.red,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        physics: BouncingScrollPhysics(),
-        children: List.generate(FoodTypes.values.length, (index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ChoiceChip(
-              selectedColor: mainColor,
-              labelStyle: TextStyle(
-                  color: value == index ? Colors.white : Colors.black),
-              label: Text(FoodTypes.values[index].toString().split('.').last),
-              selected: value == index,
-              onSelected: (selected) {
-                setState(() {
-                  value = index;
-                });
-              },
-            ),
-          );
-        }),
+      child: FutureBuilder<FoodCategory>(
+        future: foodCategories,
+        builder: (BuildContext context, snapshot) {
+          // print(snapshot.data);
+          if (snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ChoiceChip(
+                selectedColor: mainColor,
+                labelStyle:
+                TextStyle(color: value == 1 ? Colors.white : Colors.black),
+                label: Text(snapshot.data.name),
+                selected: value == 1,
+                onSelected: (selected) {
+                  setState(() {
+                    value = 1;
+                  });
+                },
+              ),
+            );
+          }else{
+            return Text("hihi");
+          };
+        },
       ),
+      //color: Colors.red,
+      // child: ListView(
+      //   scrollDirection: Axis.horizontal,
+      //   physics: BouncingScrollPhysics(),
+      //   children: foodCategories.asStream().map((event) =>
+      //   // List.generate(foodCategories, (index) {
+      //     return Padding(
+      //       padding: const EdgeInsets.all(8.0),
+      //       child: ChoiceChip(
+      //         selectedColor: mainColor,
+      //         labelStyle: TextStyle(
+      //             color: value == index ? Colors.white : Colors.black),
+      //         label: Text(FoodTypes.values[index].toString().split('.').last),
+      //         selected: value == index,
+      //         onSelected: (selected) {
+      //           setState(() {
+      //             value = index;
+      //           });
+      //         },
+      //       ),
+      //     );
+      //   // }
+      //   ),
+      // ),
     );
   }
 
