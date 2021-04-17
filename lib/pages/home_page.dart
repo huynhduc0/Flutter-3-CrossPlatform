@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<FoodModel> fetchFoodByCate(int categoryId) async {
     setState(() {
-      foodModels =  Future<FoodModel>(null);
+      foodModels = Future<FoodModel>(null);
     });
     var dio = Dio();
     dio.options.connectTimeout = 5000;
@@ -176,6 +176,18 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget buildFoodFilter() {
     return Container(
       height: 50,
+      // color: Colors.white,
+      decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          border: Border.all(color: Colors.white, width: 0),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFFDADADA),
+              spreadRadius: 0,
+              blurRadius: 0,
+              offset: Offset(0, 1.5),
+            )
+          ]),
       child: FutureBuilder<FoodCategoryModel>(
         future: foodCategories,
         builder: (BuildContext context, snapshot) {
@@ -190,6 +202,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: ChoiceChip(
                           selectedColor: mainColor,
                           labelStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                               color: value == category.id
                                   ? Colors.white
                                   : Colors.black),
@@ -291,14 +305,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       Align(
                         alignment: Alignment.topRight,
                         child: Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: mainColor,
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(12)),
-                          ),
-                         child: Text("Loading")
-                        ),
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: mainColor,
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(12)),
+                            ),
+                            child: Text("Loading")),
                       )
                     ],
                   ),
@@ -343,11 +356,11 @@ class _MyHomePageState extends State<MyHomePage> {
               style: titleStyle,
             ),
             Text(
-                "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t",
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: infoStyle,
-              ),
+              "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t",
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: infoStyle,
+            ),
           ],
         ),
       ),
@@ -358,20 +371,22 @@ class _MyHomePageState extends State<MyHomePage> {
     return SkeletonAnimation(
       shimmerColor: Colors.grey,
       shimmerDuration: 1000,
-      child:  Padding(
-      padding: const EdgeInsets.only(left: 4, right: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Row(
-                mainAxisSize: MainAxisSize.max,
-                // width:MediaQuery.of(context).size.width / 2.5,
-              ),
-              Text('\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t',),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4, right: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              // width:MediaQuery.of(context).size.width / 2.5,
+            ),
+            Text(
+              '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t',
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 
