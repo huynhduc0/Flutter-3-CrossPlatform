@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/model/cart_model.dart';
 import 'package:flutter_food_ordering/pages/home_page.dart';
+import 'package:flutter_food_ordering/widgets/bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  
   @override
   Widget build(BuildContext context) {
     var changeNotifierProvider = ChangeNotifierProvider(
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: MyHomePage(),
+        home: NavBar(),
       ),
     );
     return changeNotifierProvider;
