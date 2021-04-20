@@ -13,7 +13,7 @@ class FoodModel {
 }
 
 class Food {
-  List<String> images;
+  String images;
   String id;
   String name;
   String description;
@@ -38,30 +38,57 @@ class Food {
   });
 
   factory Food.fromJson(Map<String, dynamic> json) => Food(
-        images: List<String>.from(json["images"].map((x) => x)),
+        // images: String.from(json["images"].map((x) => x)),
+        images: json["images"],
         id: json["_id"],
         name: json["name"],
         description: json["description"],
         price: json["price"].toDouble(),
         rating: json["rating"],
+        // shop: Shop(id: "1",name: "1",email: "1"),
         shop: Shop.fromJson(json["shop"]),
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        v: json["id"],
       );
 }
 
 class Shop {
-  String id;
+  int id;
   String name;
   String email;
 
   Shop({this.id, this.name, this.email});
 
   factory Shop.fromJson(Map<String, dynamic> json) => Shop(
-        id: json["_id"],
+        id: json["id"],
         name: json["name"],
         email: json["email"],
+      );
+}
+
+class FoodCategory {
+  int id;
+  String name;
+
+  FoodCategory(this.id, this.name);
+  factory FoodCategory.fromJson(Map<String, dynamic> json) =>
+      FoodCategory(json["id"], json["name"]);
+}
+
+class FoodCategoryModel {
+  int status;
+  String message;
+  List<FoodCategory> categories;
+
+  FoodCategoryModel({this.status, this.message, this.categories});
+
+  factory FoodCategoryModel.fromJson(Map<String, dynamic> json) =>
+      FoodCategoryModel(
+        status: json["status"],
+        message: json["message"],
+        categories: List<FoodCategory>.from(
+            json["categories"].map((x) => FoodCategory.fromJson(x))),
       );
 }
 

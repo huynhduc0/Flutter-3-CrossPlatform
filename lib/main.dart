@@ -30,7 +30,6 @@ void main() => runApp(MyApp());
 // }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -40,12 +39,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class routePage extends StatefulWidget{
+class routePage extends StatefulWidget {
   @override
   routePageState createState() => routePageState();
 }
 
-class routePageState extends State<routePage>{
+class routePageState extends State<routePage> {
   final AuthService _auth = AuthService();
   bool isLoggedin = false;
   @override
@@ -54,23 +53,24 @@ class routePageState extends State<routePage>{
     // TODO: implement initState
     super.initState();
     print("Init state");
-    _auth.getToken().then((value){
-      if(value == 'null'){
+    _auth.getToken().then((value) {
+      if (value == 'null') {
         print(isLoggedin);
         setState(() {
           isLoggedin = false;
         });
-      }else if (value !=null){
+      } else if (value != null) {
         setState(() {
           isLoggedin = true;
         });
-      }else{
+      } else {
         setState(() {
           isLoggedin = false;
         });
       }
     });
   }
+
   @override
   // Widget build(BuildContext context) {
   //   return isLoggedin==true ? MyHomePage() : StartPage();
@@ -85,7 +85,7 @@ class routePageState extends State<routePage>{
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: isLoggedin ==true ? MyHomePage() : StartPage(),
+        home: isLoggedin == true ? MyHomePage() : StartPage(),
         // home: StartPage(),
       ),
     );

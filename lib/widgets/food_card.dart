@@ -26,6 +26,17 @@ class _FoodCardState extends State<FoodCard>
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(11),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                blurRadius: 1.9,
+                spreadRadius: -2,
+                offset: Offset(3,3)
+            )
+          ]
+      ),
       child: Card(
         shape: roundedRectangle12,
         child: Stack(

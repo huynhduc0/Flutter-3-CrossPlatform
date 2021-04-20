@@ -118,7 +118,10 @@ class CartBottomSheet extends StatelessWidget {
   Widget addToCardButton(cart, context) {
     return Center(
       child: RaisedButton(
-        child: Text('CheckOut', style: titleStyle),
+
+        child: Text('CheckOut', style: TextStyle(
+          color: Colors.white,
+        )),
         onPressed: cart.cartItems.length == 0
             ? null
             : () {
