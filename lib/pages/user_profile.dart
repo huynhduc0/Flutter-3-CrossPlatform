@@ -15,13 +15,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   Future<Response> fetchUserData() async {
     try {
-      // var response = await Dio().get('$BASE_URL/api/user/info/$userId');
-      var response = await Dio().get('http://localhost:3000/user/1');
-      if (response.data['status'] == 1) {
-        return response;
-      } else {
-        throw Exception(response.data['message']);
-      }
+      Dio dio = new Dio();
+      dio.options.headers['content-Type'] = 'application/json';
+      dio.options.headers['authorization'] = 'Bearer ';
+      var response = dio.get('$BASE_URL/api/user/me');
+      print(response);
+      // if (response.data['status'] == 1) {
+      //   return response;
+      // } else {
+      //   throw Exception(response.data['message']);
+      // }
     } on DioError catch (ex) {
       print('Dio error: ' + ex.message);
       throw Exception(ex.toString());
