@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 Color mainColor = Color(0xFFF17808);
 // const String BASE_URL = 'http://10.0.2.2:8000';
 // const String BASE_URL = 'http://192.168.88.137:8000';
-const String BASE_URL = 'https://nqcuong.live';
 String userId = '5dc917096e1c39409c4534c7';
 String token =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGM5MTcwOTZlMWMzOTQwOWM0NTM0YzciLCJpYXQiOjE1NzM2NTE5MDZ9.L80pvEEkwdTeon3UImY8gSq59E0vqFinVBY8-XhN6hE';

@@ -66,13 +66,16 @@ class Shop {
         email: json["email"],
       );
 }
-class FoodCategory{
+
+class FoodCategory {
   int id;
   String name;
 
   FoodCategory(this.id, this.name);
-  factory FoodCategory.fromJson(Map<String, dynamic> json) => FoodCategory(json["id"], json["name"]);
+  factory FoodCategory.fromJson(Map<String, dynamic> json) =>
+      FoodCategory(json["id"], json["name"]);
 }
+
 class FoodCategoryModel {
   int status;
   String message;
@@ -80,12 +83,15 @@ class FoodCategoryModel {
 
   FoodCategoryModel({this.status, this.message, this.categories});
 
-  factory FoodCategoryModel.fromJson(Map<String, dynamic> json) => FoodCategoryModel(
-    status: json["status"],
-    message: json["message"],
-    categories: List<FoodCategory>.from(json["categories"].map((x) => FoodCategory.fromJson(x))),
-  );
+  factory FoodCategoryModel.fromJson(Map<String, dynamic> json) =>
+      FoodCategoryModel(
+        status: json["status"],
+        message: json["message"],
+        categories: List<FoodCategory>.from(
+            json["categories"].map((x) => FoodCategory.fromJson(x))),
+      );
 }
+
 enum FoodTypes {
   StreetFood,
   All,
