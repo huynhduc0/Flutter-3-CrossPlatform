@@ -3,7 +3,11 @@
 export "FLUTTER_ROOT=/Users/pnvanh/FlutterSDK/flutter"
 export "FLUTTER_APPLICATION_PATH=/Users/pnvanh/Desktop/foodapp"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
+<<<<<<< HEAD
+export "FLUTTER_TARGET=lib/main.dart"
+=======
 export "FLUTTER_TARGET=/Users/pnvanh/Desktop/foodapp/lib/main.dart"
+>>>>>>> origin/main
 export "FLUTTER_BUILD_DIR=build"
 export "SYMROOT=${SOURCE_ROOT}/../build/ios"
 export "FLUTTER_BUILD_NAME=1.0.0"

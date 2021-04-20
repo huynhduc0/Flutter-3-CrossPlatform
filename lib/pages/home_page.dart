@@ -11,6 +11,8 @@ import 'package:flutter_food_ordering/widgets/food_card.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
+import '../credentials.dart';
+
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
