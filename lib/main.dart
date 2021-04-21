@@ -86,7 +86,7 @@ class routePageState extends State<routePage> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: isLoggedin == true ? NavBar() : NavBar(),
+        home: isLoggedin == true ? NavBar() : StartPage(),
         // home: StartPage(),
       ),
     );
