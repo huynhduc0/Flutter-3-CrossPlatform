@@ -138,7 +138,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-  Widget appBar(){
+
+  Widget appBar() {
     int items = 0;
     Provider.of<MyCart>(context).cartItems.forEach((cart) {
       items += cart.quantity;
@@ -146,33 +147,40 @@ class _MyHomePageState extends State<MyHomePage> {
     return AppBar(
       backgroundColor: Colors.white,
       centerTitle: false,
-      title: Text('MENU', style: TextStyle(color: Colors.black, fontFamily: "Poppins", fontWeight: FontWeight.bold)),
+      title: Text('MENU',
+          style: TextStyle(
+              color: Colors.black,
+              fontFamily: "Poppins",
+              fontWeight: FontWeight.bold)),
       actions: [
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Stack(
-              children: <Widget>[
-                IconButton(icon: Icon(Icons.shopping_cart), color: Colors.black, onPressed: showCart),
-                Positioned(
-                  right: 0,
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(4),
-                    decoration:
-                        BoxDecoration(shape: BoxShape.circle, color: mainColor),
-                    child: Text(
-                      '$items',
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                    ),
+            children: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  color: Colors.black,
+                  onPressed: showCart),
+              Positioned(
+                right: 0,
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(4),
+                  decoration:
+                      BoxDecoration(shape: BoxShape.circle, color: mainColor),
+                  child: Text(
+                    '$items',
+                    style: TextStyle(fontSize: 12, color: Colors.black),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
         ),
-          
       ],
     );
   }
+
   Widget buildAppBar() {
     int items = 0;
     Provider.of<MyCart>(context).cartItems.forEach((cart) {
@@ -213,7 +221,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
 
   Widget buildFoodFilter() {
     return Container(
@@ -314,18 +321,33 @@ class _MyHomePageState extends State<MyHomePage> {
         dotPosition: DotPosition.bottomRight,
         borderRadius: true,
         images: [
-          Container(decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            image: DecorationImage(image: AssetImage("assets/1.jpeg"), fit: BoxFit.cover)
-          ),child: SizedBox(height: 30,),),
-          Container(decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            image: DecorationImage(image: AssetImage("assets/2.jpeg"), fit: BoxFit.cover)
-          ),child: SizedBox(height: 30,),),
-          Container(decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            image: DecorationImage(image: AssetImage("assets/1.jpeg"), fit: BoxFit.cover)
-          ),child: SizedBox(height: 30,),),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                    image: AssetImage("assets/1.jpeg"), fit: BoxFit.cover)),
+            child: SizedBox(
+              height: 30,
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                    image: AssetImage("assets/2.jpeg"), fit: BoxFit.cover)),
+            child: SizedBox(
+              height: 30,
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                    image: AssetImage("assets/1.jpeg"), fit: BoxFit.cover)),
+            child: SizedBox(
+              height: 30,
+            ),
+          ),
           // Image.asset("assets/2.jpeg", fit: BoxFit.cover),
           // Image.asset("assets/1.jpeg", fit: BoxFit.cover),
         ],

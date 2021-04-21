@@ -10,11 +10,19 @@ String token =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGM5MTcwOTZlMWMzOTQwOWM0NTM0YzciLCJpYXQiOjE1NzM2NTE5MDZ9.L80pvEEkwdTeon3UImY8gSq59E0vqFinVBY8-XhN6hE';
 
 //Style
-final headerStyle = TextStyle(fontSize: 22, fontWeight: FontWeight.bold, fontFamily: "Poppins");
-final titleStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold , fontFamily: "Poppins", color: Colors.black);
-final titleStyle2 = TextStyle(fontSize: 16, color: Colors.black45, fontFamily: "Poppins");
-final subtitleStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: "Poppins");
-final infoStyle = TextStyle(fontSize: 12, color: Colors.black54, fontFamily: "Poppins");
+final headerStyle =
+    TextStyle(fontSize: 22, fontWeight: FontWeight.bold, fontFamily: "Poppins");
+final titleStyle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    fontFamily: "Poppins",
+    color: Colors.black);
+final titleStyle2 =
+    TextStyle(fontSize: 16, color: Colors.black45, fontFamily: "Poppins");
+final subtitleStyle =
+    TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: "Poppins");
+final infoStyle =
+    TextStyle(fontSize: 12, color: Colors.black54, fontFamily: "Poppins");
 
 //Decoration
 final roundedRectangle12 = RoundedRectangleBorder(
