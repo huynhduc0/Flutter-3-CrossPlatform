@@ -58,9 +58,9 @@ class _FoodCardState extends State<FoodCard>
                 decoration: BoxDecoration(
                   color: mainColor,
                   borderRadius:
-                      BorderRadius.only(topRight: Radius.circular(12)),
+                      BorderRadius.only(topRight: Radius.circular(12), bottomLeft: Radius.circular(12)),
                 ),
-                child: Text(food.shop.name),
+                child: Text(food.shop.name , style: subtitleStyle.copyWith(color: Colors.white),),
               ),
             )
           ],
@@ -132,7 +132,7 @@ class _FoodCardState extends State<FoodCard>
             itemCount: 5,
             itemSize: 14,
             unratedColor: Colors.black,
-            itemPadding: EdgeInsets.only(right: 4.0),
+            itemPadding: EdgeInsets.only(right: 2.0),
             ignoreGestures: true,
             itemBuilder: (context, index) => Icon(Icons.star, color: mainColor),
             onRatingUpdate: (rating) {},
