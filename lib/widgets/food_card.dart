@@ -162,7 +162,7 @@ class _FoodCardState extends State<FoodCard>
               onTap: addItemToCard,
               splashColor: Colors.white70,
               customBorder: roundedRectangle4,
-              child: Icon(Icons.add),
+              child: Icon(Icons.add, color: Colors.white,),
             ),
           )
         ],
