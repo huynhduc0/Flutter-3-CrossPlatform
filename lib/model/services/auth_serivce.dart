@@ -6,7 +6,7 @@ import 'package:flutter_food_ordering/credentials.dart';
 import 'package:flutter_food_ordering/model/user_model.dart';
 // import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'dart:io' show Platform;
 class AuthService {
   final storage = new FlutterSecureStorage();
 
@@ -16,7 +16,7 @@ class AuthService {
     var dio = Dio();
     print(GOOGLE_LOGIN_URL);
     final response = await dio.post(GOOGLE_LOGIN_URL,
-        data: {"id_token": token});
+        data: {"id_token": token, "device_type":"ios"});
     print(response.data.toString());
     this.storeToken(response.data["token"]);
     return UserDataProfile.fromMap(response.data["user"]);

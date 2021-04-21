@@ -8,7 +8,6 @@ import 'package:flutter_food_ordering/model/cart_model.dart';
 import 'package:flutter_food_ordering/model/food_model.dart';
 import 'package:flutter_food_ordering/pages/user_profile.dart';
 import 'package:flutter_food_ordering/widgets/cart_bottom_sheet.dart';
-import 'package:flutter_food_ordering/widgets/dashboard.dart';
 import 'package:flutter_food_ordering/widgets/food_card.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_text/skeleton_text.dart';

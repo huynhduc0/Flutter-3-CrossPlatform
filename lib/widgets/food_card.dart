@@ -76,7 +76,7 @@ class _FoodCardState extends State<FoodCard>
         borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
         child: Image.network(
           // '$BASE_URL/uploads/${food.images[0]}',
-          food.images[0],
+          food.images,
           fit: BoxFit.cover,
           loadingBuilder: (context, Widget child, ImageChunkEvent progress) {
             if (progress == null) return child;
