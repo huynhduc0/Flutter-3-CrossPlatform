@@ -9,8 +9,11 @@ class DetailsScreen extends StatelessWidget {
   DetailsScreen(this.food);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Body(food: food),
+    return Hero(
+      tag: "${food.name}",
+      child: Scaffold(
+        body: Body(food: food),
+      ),
     );
   }
 }

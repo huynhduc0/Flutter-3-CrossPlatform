@@ -6,6 +6,7 @@ import 'backdrop_rating.dart';
 import 'cast_and_crew.dart';
 import 'genres.dart';
 import 'title_duration_and_fav_btn.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
 
 class Body extends StatelessWidget {
   final Food food;
@@ -13,6 +14,7 @@ class Body extends StatelessWidget {
   const Body({Key key, this.food}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    timeDilation = 1.6;
     // it will provide us total height and width
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(

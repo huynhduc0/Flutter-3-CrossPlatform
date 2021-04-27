@@ -15,21 +15,38 @@ class BackdropAndRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("hero tag ${food.name}");
     return Container(
       // 40% of our total height
       height: size.height * 0.4,
       child: Stack(
         children: <Widget>[
+          // Hero(
+          //   tag: "${food.name}",
+          //   child:
           Container(
             height: size.height * 0.4 - 50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(50)),
+              // image: Hero(tag: tag, child: child)
+              // Hero(tag: "${food.id}",
+              // child: DecorationImage(
+              //   fit: BoxFit.cover,
+              //   image: NetworkImage(food.images),),
+              // image: NetworkImage(
+
+              // )
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage(food.images),
               ),
             ),
           ),
+          // ),
+          // Hero(
+          //   tag: "${food.id}+1",
+          //   child: Image.network(food.images),
+          // ),
           // Rating Box
           Positioned(
             bottom: 0,

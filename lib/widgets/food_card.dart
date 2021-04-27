@@ -84,23 +84,26 @@ class _FoodCardState extends State<FoodCard>
       height: MediaQuery.of(context).size.width / 2.5,
       child: ClipRRect(
         borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-        child: Image.network(
-          // '$BASE_URL/uploads/${food.images[0]}',
-          food.images,
-          fit: BoxFit.cover,
-          loadingBuilder: (context, Widget child, ImageChunkEvent progress) {
-            if (progress == null) return child;
-            return Center(
-              child: Padding(
-                padding: EdgeInsets.all(32),
-                child: CircularProgressIndicator(
-                    value: progress.expectedTotalBytes != null
-                        ? progress.cumulativeBytesLoaded /
-                            progress.expectedTotalBytes
-                        : null),
-              ),
-            );
-          },
+        child: Hero(
+          tag: "${food.name}",
+          child: Image.network(
+            // '$BASE_URL/uploads/${food.images[0]}',
+            food.images,
+            fit: BoxFit.cover,
+            loadingBuilder: (context, Widget child, ImageChunkEvent progress) {
+              if (progress == null) return child;
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.all(32),
+                  child: CircularProgressIndicator(
+                      value: progress.expectedTotalBytes != null
+                          ? progress.cumulativeBytesLoaded /
+                              progress.expectedTotalBytes
+                          : null),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
