@@ -4,7 +4,7 @@ import 'package:flutter_food_ordering/constants/values.dart';
 import 'package:flutter_food_ordering/main.dart';
 import 'package:flutter_food_ordering/model/cart_model.dart';
 import 'package:flutter_food_ordering/model/food_model.dart';
-import 'package:flutter_food_ordering/pages/details-screen.dart';
+import 'package:flutter_food_ordering/pages/details/details_screen.dart';
 import 'package:flutter_food_ordering/widgets/cart_bottom_sheet.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
@@ -172,7 +172,10 @@ class _FoodCardState extends State<FoodCard>
               onTap: addItemToCard,
               splashColor: Colors.white70,
               customBorder: roundedRectangle4,
-              child: Icon(Icons.add, color: Colors.white,),
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
             ),
           )
         ],
