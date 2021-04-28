@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_food_ordering/constants/values.dart';
 import 'package:flutter_food_ordering/pages/home_page.dart';
+import 'package:flutter_food_ordering/pages/notification_page.dart';
 import 'package:flutter_food_ordering/pages/user_profile.dart';
 
 import '../pages/user_profile.dart';
@@ -15,7 +15,7 @@ class _NavBarState extends State<NavBar> {
 
   final List<Widget> viewContainer = [
     MyHomePage(),
-    MyHomePage(),
+    NotificationPage(),
     UserProfilePage(),
   ];
 

@@ -71,7 +71,7 @@ class CartBottomSheet extends StatelessWidget {
               leading: CircleAvatar(
                   // backgroundImage: NetworkImage('$BASE_URL/uploads/${cart.cartItems[index].food.images[0]}')),
                   backgroundImage:
-                      NetworkImage(cart.cartItems[index].food.images[0])),
+                      NetworkImage(cart.cartItems[index].food.images)),
               title: Text('${cart.cartItems[index].food.name}',
                   style: subtitleStyle),
               subtitle: Text('\$ ${cart.cartItems[index].food.price}'),

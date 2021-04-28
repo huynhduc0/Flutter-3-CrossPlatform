@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/constants/values.dart';
@@ -120,17 +121,63 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: appBar(),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-        child: Column(
+        margin: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+        child: ListView(
           children: <Widget>[
-            buildAppBar(),
-            buildFoodFilter(),
+            // buildAppBar(),
+            Container(child: buildFoodFilter()),
+            // buildFoodFilter(),
             Divider(),
-            buildFoodList(),
+            buildSlide(),
+            Divider(),
+            Container(child: buildFoodList()),
           ],
         ),
       ),
+    );
+  }
+
+  Widget appBar() {
+    int items = 0;
+    Provider.of<MyCart>(context).cartItems.forEach((cart) {
+      items += cart.quantity;
+    });
+    return AppBar(
+      backgroundColor: Colors.white,
+      centerTitle: false,
+      title: Text('MENU',
+          style: TextStyle(
+              color: Colors.black,
+              fontFamily: "Poppins",
+              fontWeight: FontWeight.bold)),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Stack(
+            children: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  color: Colors.black,
+                  onPressed: showCart),
+              Positioned(
+                right: 0,
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(4),
+                  decoration:
+                      BoxDecoration(shape: BoxShape.circle, color: mainColor),
+                  child: Text(
+                    '$items',
+                    style: TextStyle(fontSize: 12, color: Colors.black),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -233,6 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ;
         },
       ),
+
       //color: Colors.red,
       // child: ListView(
       //   scrollDirection: Axis.horizontal,
@@ -260,6 +308,53 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget buildSlide() {
+    return SizedBox(
+      height: 200,
+      child: Carousel(
+        dotSize: 4.0,
+        dotSpacing: 15.0,
+        dotColor: mainColor.withOpacity(0.6),
+        dotIncreasedColor: mainColor,
+        dotBgColor: Colors.transparent,
+        indicatorBgPadding: 5.0,
+        dotPosition: DotPosition.bottomRight,
+        borderRadius: true,
+        images: [
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                    image: AssetImage("assets/1.jpeg"), fit: BoxFit.cover)),
+            child: SizedBox(
+              height: 30,
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                    image: AssetImage("assets/2.jpeg"), fit: BoxFit.cover)),
+            child: SizedBox(
+              height: 30,
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                    image: AssetImage("assets/1.jpeg"), fit: BoxFit.cover)),
+            child: SizedBox(
+              height: 30,
+            ),
+          ),
+          // Image.asset("assets/2.jpeg", fit: BoxFit.cover),
+          // Image.asset("assets/1.jpeg", fit: BoxFit.cover),
+        ],
+      ),
+    );
+  }
+
   Widget buildFoodList() {
     return Expanded(
       child: FutureBuilder<FoodModel>(
@@ -267,11 +362,12 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
             return GridView.count(
+              shrinkWrap: true,
               childAspectRatio: 0.65,
               mainAxisSpacing: 4,
               crossAxisSpacing: 4,
               crossAxisCount: 2,
-              physics: BouncingScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               children: snapshot.data.foods.length > 0
                   ? snapshot.data.foods.map((food) {
                       return FoodCard(food);
@@ -283,11 +379,12 @@ class _MyHomePageState extends State<MyHomePage> {
           }
           // return Center(child: CircularProgressIndicator());
           return GridView.count(
+            shrinkWrap: true,
             childAspectRatio: 0.65,
             mainAxisSpacing: 4,
             crossAxisSpacing: 4,
             crossAxisCount: 2,
-            physics: BouncingScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             children: List.generate(4, (index) {
               return Container(
                 child: Card(

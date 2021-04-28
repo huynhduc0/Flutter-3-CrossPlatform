@@ -3,6 +3,7 @@ import 'package:flutter_food_ordering/model/cart_model.dart';
 import 'package:flutter_food_ordering/model/services/auth_serivce.dart';
 import 'package:flutter_food_ordering/pages/home_page.dart';
 import 'package:flutter_food_ordering/pages/start_screen.dart';
+import 'package:flutter_food_ordering/widgets/bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
@@ -49,7 +50,7 @@ class routePageState extends State<routePage> {
   bool isLoggedin = false;
   @override
   void initState() {
-    _auth.unsetToken();
+    // _auth.unsetToken();
     // TODO: implement initState
     super.initState();
     print("Init state");
@@ -85,7 +86,7 @@ class routePageState extends State<routePage> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: isLoggedin == true ? MyHomePage() : StartPage(),
+        home: !isLoggedin ? NavBar() : StartPage(),
         // home: StartPage(),
       ),
     );

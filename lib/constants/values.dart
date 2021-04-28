@@ -8,13 +8,33 @@ Color mainColor = Color(0xFFF17808);
 String userId = '5dc917096e1c39409c4534c7';
 String token =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGM5MTcwOTZlMWMzOTQwOWM0NTM0YzciLCJpYXQiOjE1NzM2NTE5MDZ9.L80pvEEkwdTeon3UImY8gSq59E0vqFinVBY8-XhN6hE';
+const kSecondaryColor = Color(0xFFFE6D8E);
+const kTextColor = Color(0xFF12153D);
+const kTextLightColor = Color(0xFF9A9BB2);
+const kFillStarColor = Color(0xFFFCC419);
+
+const kDefaultPadding = 20.0;
+
+const kDefaultShadow = BoxShadow(
+  offset: Offset(0, 4),
+  blurRadius: 4,
+  color: Colors.black26,
+);
 
 //Style
-final headerStyle = TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
-final titleStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
-final titleStyle2 = TextStyle(fontSize: 16, color: Colors.black45);
-final subtitleStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500);
-final infoStyle = TextStyle(fontSize: 12, color: Colors.black54);
+final headerStyle =
+    TextStyle(fontSize: 22, fontWeight: FontWeight.bold, fontFamily: "Poppins");
+final titleStyle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    fontFamily: "Poppins",
+    color: Colors.black);
+final titleStyle2 =
+    TextStyle(fontSize: 16, color: Colors.black45, fontFamily: "Poppins");
+final subtitleStyle =
+    TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: "Poppins");
+final infoStyle =
+    TextStyle(fontSize: 12, color: Colors.black54, fontFamily: "Poppins");
 
 //Decoration
 final roundedRectangle12 = RoundedRectangleBorder(

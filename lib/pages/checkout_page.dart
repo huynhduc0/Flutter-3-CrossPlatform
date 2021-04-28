@@ -177,7 +177,7 @@ class _CheckOutPageState extends State<CheckOutPage>
               borderRadius: BorderRadius.all(Radius.circular(6)),
               child: Image.network(
                 // '$BASE_URL/uploads/${cartModel.food.images[0]}',
-                cartModel.food.images[0],
+                cartModel.food.images,
                 fit: BoxFit.cover,
                 width: 100,
                 height: 100,

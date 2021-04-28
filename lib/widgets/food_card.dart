@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/constants/values.dart';
 import 'package:flutter_food_ordering/main.dart';
 import 'package:flutter_food_ordering/model/cart_model.dart';
 import 'package:flutter_food_ordering/model/food_model.dart';
+import 'package:flutter_food_ordering/pages/details/details_screen.dart';
 import 'package:flutter_food_ordering/widgets/cart_bottom_sheet.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
@@ -26,44 +28,52 @@ class _FoodCardState extends State<FoodCard>
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(11),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                blurRadius: 1.9,
-                spreadRadius: -2,
-                offset: Offset(3,3)
-            )
-          ]
-      ),
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(11), boxShadow: [
+        BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 1.9,
+            spreadRadius: -2,
+            offset: Offset(3, 3))
+      ]),
       child: Card(
         shape: roundedRectangle12,
-        child: Stack(
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                buildImage(),
-                buildTitle(),
-                buildRating(),
-                buildPriceInfo(),
-              ],
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: mainColor,
-                  borderRadius:
-                      BorderRadius.only(topRight: Radius.circular(12)),
-                ),
-                child: Text(food.shop.name),
+        child: InkWell(
+          onTap: () => {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return DetailsScreen(food);
+            }))
+          },
+          child: Stack(
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  buildImage(),
+                  buildTitle(),
+                  buildRating(),
+                  buildPriceInfo(),
+                ],
               ),
-            )
-          ],
+              Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: mainColor,
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(12),
+                        bottomLeft: Radius.circular(12)),
+                  ),
+                  child: Text(
+                    food.shop.name,
+                    style: subtitleStyle.copyWith(color: Colors.white),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -74,23 +84,26 @@ class _FoodCardState extends State<FoodCard>
       height: MediaQuery.of(context).size.width / 2.5,
       child: ClipRRect(
         borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-        child: Image.network(
-          // '$BASE_URL/uploads/${food.images[0]}',
-          food.images[0],
-          fit: BoxFit.cover,
-          loadingBuilder: (context, Widget child, ImageChunkEvent progress) {
-            if (progress == null) return child;
-            return Center(
-              child: Padding(
-                padding: EdgeInsets.all(32),
-                child: CircularProgressIndicator(
-                    value: progress.expectedTotalBytes != null
-                        ? progress.cumulativeBytesLoaded /
-                            progress.expectedTotalBytes
-                        : null),
-              ),
-            );
-          },
+        child: Hero(
+          tag: "${food.name}",
+          child: Image.network(
+            // '$BASE_URL/uploads/${food.images[0]}',
+            food.images,
+            fit: BoxFit.cover,
+            loadingBuilder: (context, Widget child, ImageChunkEvent progress) {
+              if (progress == null) return child;
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.all(32),
+                  child: CircularProgressIndicator(
+                      value: progress.expectedTotalBytes != null
+                          ? progress.cumulativeBytesLoaded /
+                              progress.expectedTotalBytes
+                          : null),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -132,7 +145,7 @@ class _FoodCardState extends State<FoodCard>
             itemCount: 5,
             itemSize: 14,
             unratedColor: Colors.black,
-            itemPadding: EdgeInsets.only(right: 4.0),
+            itemPadding: EdgeInsets.only(right: 2.0),
             ignoreGestures: true,
             itemBuilder: (context, index) => Icon(Icons.star, color: mainColor),
             onRatingUpdate: (rating) {},
@@ -162,7 +175,10 @@ class _FoodCardState extends State<FoodCard>
               onTap: addItemToCard,
               splashColor: Colors.white70,
               customBorder: roundedRectangle4,
-              child: Icon(Icons.add),
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
             ),
           )
         ],
