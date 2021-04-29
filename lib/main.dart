@@ -6,6 +6,9 @@ import 'package:flutter_food_ordering/pages/start_screen.dart';
 import 'package:flutter_food_ordering/widgets/bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 
+// tạm thời thôi đừng push lên git
+import 'package:flutter_food_ordering/pages/bill_page.dart';
+
 void main() => runApp(MyApp());
 
 // class MyApp extends StatelessWidget {
@@ -88,6 +91,7 @@ class routePageState extends State<routePage> {
         ),
         home: isLoggedin ? NavBar() : StartPage(),
         // home: StartPage(),
+        // home: BillPage(),
       ),
     );
     return changeNotifierProvider;

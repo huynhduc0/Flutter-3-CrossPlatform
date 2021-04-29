@@ -14,9 +14,17 @@ class AuthService {
   //Sign in with Google
   Future<UserDataProfile> loginWithGoogle(String token) async {
     var dio = Dio();
+
+    String device = "";
+    if (Platform.isAndroid) {
+      device = "android";
+    } else if (Platform.isIOS) {
+      device = "ios";
+    }
+
     print(GOOGLE_LOGIN_URL);
     final response = await dio.post(GOOGLE_LOGIN_URL,
-        data: {"id_token": token, "device_type":"ios"});
+        data: {"id_token": token, "device_type":device});
     print(response.data.toString());
     this.storeToken(response.data["token"]);
     return UserDataProfile.fromMap(response.data["user"]);

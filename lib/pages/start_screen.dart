@@ -26,7 +26,7 @@ class _StartPageState extends State<StartPage> {
   String _accessToken;
   GoogleSignIn _googleSignIn = GoogleSignIn(
     // Optional clientId
-    clientId: GOOGLE_LOGIN_KEY,
+    // clientId: GOOGLE_LOGIN_KEY,
     scopes: <String>[
       'email',
       // 'https://www.googleapis.com/auth/contacts.readonly',
@@ -39,7 +39,7 @@ class _StartPageState extends State<StartPage> {
           .signIn()
           .then((result) => {
                 result.authentication.then((googleKey) {
-                  // print(googleKey.idToken);
+                  print(googleKey.idToken);
                   // print(googleKey.idToken);
                   // print(_googleSignIn.currentUser.displayName);
                   _accessToken = googleKey.idToken;
