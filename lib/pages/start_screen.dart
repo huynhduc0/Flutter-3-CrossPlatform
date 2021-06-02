@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -26,7 +27,7 @@ class _StartPageState extends State<StartPage> {
   String _accessToken;
   GoogleSignIn _googleSignIn = GoogleSignIn(
     // Optional clientId
-    // clientId: GOOGLE_LOGIN_KEY,
+    clientId: GOOGLE_LOGIN_KEY,
     scopes: <String>[
       'email',
       // 'https://www.googleapis.com/auth/contacts.readonly',
@@ -39,7 +40,9 @@ class _StartPageState extends State<StartPage> {
           .signIn()
           .then((result) => {
                 result.authentication.then((googleKey) {
-                  print(googleKey.idToken);
+                  print("idToken");
+                  log(googleKey.idToken);
+                  print("212312312123123");
                   // print(googleKey.idToken);
                   // print(_googleSignIn.currentUser.displayName);
                   _accessToken = googleKey.idToken;
@@ -62,6 +65,11 @@ class _StartPageState extends State<StartPage> {
     } catch (error) {
       print(error);
     }
+    Navigator.of(context).pushReplacement(
+      CupertinoPageRoute(
+            builder: (_) => NavBar(),
+          )
+    );
   }
 
   @override
@@ -91,7 +99,7 @@ class _StartPageState extends State<StartPage> {
                       Buttons.Google,
                       text: "Sign up with Google",
                       onPressed: () => _handleSignIn(),
-
+                      
                     )
                   ],
                 ))

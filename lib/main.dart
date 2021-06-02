@@ -7,7 +7,7 @@ import 'package:flutter_food_ordering/widgets/bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 
 // tạm thời thôi đừng push lên git
-import 'package:flutter_food_ordering/pages/bill_page.dart';
+// import 'package:flutter_food_ordering/pages/bill_page.dart';
 
 void main() => runApp(MyApp());
 
