@@ -14,11 +14,11 @@ class FoodModel {
 
 class Food {
   String images;
-  String id;
+  int id;
   String name;
   String description;
   double price;
-  int rating;
+  double rating;
   Shop shop;
   DateTime createdAt;
   DateTime updatedAt;

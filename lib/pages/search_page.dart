@@ -163,7 +163,21 @@ class _SearchPageState extends State<SearchPage> {
                       ? snapshot.data.foods.map((food) {
                           return FoodCard(food);
                         }).toList()
-                      : [Text("Nothing to show")],
+                      : [
+                          Expanded(
+                            child: Center(
+                                child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text('No review!', style: titleStyle2),
+                                SizedBox(height: 16),
+                                Icon(Icons.hourglass_empty_rounded, size: 40),
+                              ],
+                            )),
+                          ),
+                        ],
                 );
               } else {
                 return Center(

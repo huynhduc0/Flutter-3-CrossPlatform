@@ -188,6 +188,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  flutter_spinkit:
+    dependency: "direct main"
+    description:
+      name: flutter_spinkit
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.2+1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -345,6 +352,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  simple_moment:
+    dependency: "direct main"
+    description:
+      name: simple_moment
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.4"
   skeleton_text:
     dependency: "direct main"
     description:

@@ -1,6 +1,7 @@
 import 'dart:convert';
 // ignore: avoid_web_libraries_in_flutter
 // import 'dart:html';
+import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_food_ordering/credentials.dart';

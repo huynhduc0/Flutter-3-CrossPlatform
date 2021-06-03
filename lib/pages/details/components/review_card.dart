@@ -4,10 +4,10 @@ import 'package:flutter_food_ordering/model/food_model.dart';
 
 import '../details_screen.dart';
 
-class CastCard extends StatelessWidget {
+class ReviewCard extends StatelessWidget {
   final Food food;
 
-  const CastCard({Key key, this.food}) : super(key: key);
+  const ReviewCard({Key key, this.food}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(

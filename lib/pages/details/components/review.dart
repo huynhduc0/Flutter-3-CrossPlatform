@@ -4,28 +4,29 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/constants/values.dart';
 import 'package:flutter_food_ordering/model/food_model.dart';
+import 'package:flutter_food_ordering/pages/details/components/review_card.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../../credentials.dart';
 import 'cast_card.dart';
 import 'gender_card.dart';
 
-class Genres extends StatefulWidget {
+class Review extends StatefulWidget {
   final Food food;
-  Genres({
+  Review({
     Key key,
     @required this.food,
   }) : super(key: key);
 
   @override
-  _GenresState createState() => _GenresState(food);
+  _ReviewState createState() => _ReviewState(food);
 }
 
-class _GenresState extends State<Genres> {
+class _ReviewState extends State<Review> {
   Food food;
   Future<FoodModel> foodModels;
   bool loading = false;
-  _GenresState(this.food);
+  _ReviewState(this.food);
   @override
   void initState() {
     foodModels = fetchAllFoods();
@@ -73,28 +74,22 @@ class _GenresState extends State<Genres> {
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
             return Padding(
-              padding: EdgeInsets.all(kDefaultPadding),
-              // EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
-              child: SizedBox(
-                height: 160,
+              padding: EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: snapshot.data.foods.length,
                   itemBuilder: (context, index) =>
-                      CastCard(
+                      ReviewCard(
                         food: snapshot.data.foods[index],
                       ),
                   // itemBuilder: (context, index) => Text(
                   //   food.name[index] + " ",
                   // ),
                 ),
-              ),
+
             );
           }
-          else return Center(child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SpinKitSquareCircle(color: mainColor,),
-          ));
+          else return Center(child: SpinKitSquareCircle());
         }
     );
   }
