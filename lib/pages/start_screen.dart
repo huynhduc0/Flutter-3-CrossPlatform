@@ -11,6 +11,7 @@ import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:lottie/lottie.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:toast/toast.dart';
 
 import '../credentials.dart';
 import '../main.dart';
@@ -26,7 +27,7 @@ class _StartPageState extends State<StartPage> {
   String _accessToken;
   GoogleSignIn _googleSignIn = GoogleSignIn(
     // Optional clientId
-    // clientId: GOOGLE_LOGIN_KEY,
+    clientId: GOOGLE_LOGIN_KEY,
     scopes: <String>[
       'email',
       // 'https://www.googleapis.com/auth/contacts.readonly',
@@ -35,29 +36,24 @@ class _StartPageState extends State<StartPage> {
 
   Future<void> _handleSignIn() async {
     try {
-      await _googleSignIn
-          .signIn()
-          .then((result) => {
-                result.authentication.then((googleKey) {
-                  print(googleKey.idToken);
-                  // print(googleKey.idToken);
-                  // print(_googleSignIn.currentUser.displayName);
-                  _accessToken = googleKey.idToken;
-                  print(_accessToken);
-                  UserDataProfile us = auth
-                          .loginWithGoogle(_accessToken)
-                          .then((user) => {auth.storeUser(user)})
-                      as UserDataProfile;
-                  UserDataProfile saved = auth
-                      .getCurrentUser()
-                      .then((value) => value) as UserDataProfile;
-                  print("sprin mike");
-                  print(saved);
-                  Navigator.pop(context);
-                })
-              })
-          .catchError((err) {
-        print('error occured' + err.toString());
+      await _googleSignIn.signIn().then((result) => {
+        result.authentication.then((googleKey) {
+          _accessToken = googleKey.idToken;
+          auth.loginWithGoogle(_accessToken).then((user) => {
+            auth.storeUser(user).then((value) => {
+              if(value == true) {
+                Toast.show('Login with google success', context),
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                ),
+              } else {
+                Toast.show('Login with google failed', context),
+              }
+            })
+          });
+        })
+      }).catchError((err) {
+        print('error: ' + err.toString());
       });
     } catch (error) {
       print(error);

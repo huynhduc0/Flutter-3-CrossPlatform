@@ -23,9 +23,15 @@ class AuthService {
     }
 
     print(GOOGLE_LOGIN_URL);
-    final response = await dio.post(GOOGLE_LOGIN_URL,
-        data: {"id_token": token, "device_type":device});
+    final response = await dio.post(
+      GOOGLE_LOGIN_URL,
+      data: {
+        "id_token": token,
+        "device_type": device
+      }
+    );
     print(response.data.toString());
+
     this.storeToken(response.data["token"]);
     return UserDataProfile.fromMap(response.data["user"]);
   }
