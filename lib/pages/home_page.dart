@@ -29,7 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<FoodCategoryModel> foodCategories;
   Future<FoodModel> fetchAllFoods() async {
     AuthService auth = AuthService();
-   
+
     setState(() {
       foodModels = null;
     });
@@ -41,7 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
         loading = true;
       });
       // var response = await dio.get('$BASE_URL/api/foods');
-      var response = await dio.get('$BASE_URL/api/food');
+      var response = await dio
+          .get('$BASE_URL/api/food?latitude=16.0366595&longitude=108.2102202');
       this.setState(() {
         loading = false;
       });
@@ -388,7 +389,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   ? snapshot.data.foods.map((food) {
                       return FoodCard(food);
                     }).toList()
-                  : [Text("Nothing to show")],
+                  : [
+                      Expanded(
+                        child: Center(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                                'No Food to show!',
+                                style: titleStyle2),
+                            SizedBox(height: 16),
+                            Icon(Icons.hourglass_empty_rounded, size: 40),
+                          ],
+                        )),
+                      ),
+                    ],
             );
           } else if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));

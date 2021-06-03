@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/constants/values.dart';
 import 'package:flutter_food_ordering/model/food_model.dart';
+import 'package:flutter_food_ordering/pages/details/components/review.dart';
 
 import 'backdrop_rating.dart';
 import 'cast_and_crew.dart';
