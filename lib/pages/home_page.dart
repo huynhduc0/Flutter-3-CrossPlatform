@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/constants/values.dart';
 import 'package:flutter_food_ordering/model/cart_model.dart';
 import 'package:flutter_food_ordering/model/food_model.dart';
+import 'package:flutter_food_ordering/pages/search_page.dart';
 import 'package:flutter_food_ordering/pages/user_profile.dart';
 import 'package:flutter_food_ordering/widgets/cart_bottom_sheet.dart';
 import 'package:flutter_food_ordering/widgets/food_card.dart';
@@ -105,6 +106,11 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  showSearchPage() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => SearchPage()));
+  }
+
   viewProfile() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => UserProfilePage()),
@@ -157,10 +163,18 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: const EdgeInsets.all(8.0),
           child: Stack(
             children: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.shopping_cart),
-                  color: Colors.black,
-                  onPressed: showCart),
+              Row(
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.search),
+                      color: Colors.black,
+                      onPressed: showSearchPage),
+                  IconButton(
+                      icon: Icon(Icons.shopping_cart),
+                      color: Colors.black,
+                      onPressed: showCart),
+                ],
+              ),
               Positioned(
                 right: 0,
                 child: Container(

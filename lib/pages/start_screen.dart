@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -58,6 +59,11 @@ class _StartPageState extends State<StartPage> {
     } catch (error) {
       print(error);
     }
+    Navigator.of(context).pushReplacement(
+      CupertinoPageRoute(
+            builder: (_) => NavBar(),
+          )
+    );
   }
 
   @override
@@ -87,7 +93,7 @@ class _StartPageState extends State<StartPage> {
                       Buttons.Google,
                       text: "Sign up with Google",
                       onPressed: () => _handleSignIn(),
-
+                      
                     )
                   ],
                 ))
