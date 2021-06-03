@@ -1,3 +1,5 @@
+import 'package:flutter_food_ordering/model/food_model.dart';
+
 class OrderModel {
   int status;
   String message;
@@ -12,43 +14,47 @@ class OrderModel {
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
         status: json["status"],
         message: json["message"],
-        order: List<Order>.from(json["order"].map((x) => Order.fromJson(x))),
+        order: List<Order>.from(json["orders"].map((x) => Order.fromJson(x))),
       );
 }
 
 class Order {
   String id;
   DateTime orderDate;
-  List<Item> items;
+  List<OrderDetail> detail;
   num totalPrice;
-  Customer shop;
-  Customer customer;
+  // Customer shop;
+  // Customer customer;
   DateTime createdAt;
   DateTime updatedAt;
-  int v;
+  String orderCode;
+  // int v;
 
   Order({
     this.id,
     this.orderDate,
-    this.items,
+    this.detail,
     this.totalPrice,
-    this.shop,
-    this.customer,
+    // this.shop,
+    // this.customer,
     this.createdAt,
     this.updatedAt,
-    this.v,
+    this.orderCode,
+    // this.v,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
-        id: json["_id"],
+        id: json["id"],
         orderDate: DateTime.parse(json["order_date"]),
-        items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
-        totalPrice: json["total_price"],
-        shop: Customer.fromJson(json["shop"]),
-        customer: Customer.fromJson(json["customer"]),
+        detail: List<OrderDetail>.from(
+            json["detail"].map((x) => OrderDetail.fromJson(x))),
+        totalPrice: json["totalPrice"],
+        // shop: Customer.fromJson(json["shop"]),
+        // customer: Customer.fromJson(json["customer"]),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
+        orderCode: json['order_code'],
+        // v: json["__v"],
       );
 }
 
@@ -64,34 +70,33 @@ class Customer {
   });
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
-        id: json["_id"],
+        id: json["id"],
         name: json["name"],
         email: json["email"],
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
+        "id": id,
         "name": name,
         "email": email,
       };
 }
 
-class Item {
+class OrderDetail {
   String id;
+  int orderId;
   Food food;
   int quantity;
+  int price;
 
-  Item({
-    this.id,
-    this.food,
-    this.quantity,
-  });
+  OrderDetail({this.id, this.food, this.quantity, this.orderId, this.price});
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
-        id: json["_id"],
-        food: Food.fromJson(json["food"]),
-        quantity: json["quantity"],
-      );
+  factory OrderDetail.fromJson(Map<String, dynamic> json) => OrderDetail(
+      id: json["id"],
+      food: Food.fromJson(json["food"]),
+      quantity: json["quantity"],
+      orderId: json['order_id'],
+      price: json['price']);
 }
 
 class Food {
@@ -99,18 +104,22 @@ class Food {
   String name;
   String description;
   num price;
+  String image;
+  Customer shop;
 
-  Food({
-    this.id,
-    this.name,
-    this.description,
-    this.price,
-  });
+  Food(
+      {this.id,
+      this.name,
+      this.description,
+      this.price,
+      this.image,
+      this.shop});
 
   factory Food.fromJson(Map<String, dynamic> json) => Food(
-        id: json["_id"],
-        name: json["name"],
-        description: json["description"],
-        price: json["price"],
-      );
+      id: json["id"],
+      name: json["name"],
+      description: json["description"],
+      price: json["price"],
+      image: json['image'],
+      shop: Customer.fromJson(json["shop"]));
 }

@@ -53,7 +53,8 @@ class routePageState extends State<routePage> {
   bool isLoggedin = false;
   @override
   void initState() {
-    // _auth.unsetToken();
+    _auth.unsetToken();
+
     // TODO: implement initState
     super.initState();
     print("Init state");
