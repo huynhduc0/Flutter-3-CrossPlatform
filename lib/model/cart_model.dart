@@ -35,6 +35,29 @@ class MyCart extends ChangeNotifier {
     notifyListeners();
   }
 
+  void decreaseDeItem(CartItem cartModel) {
+    CartItem old;
+    int key;
+    print("---" + cartItems.length.toString());
+    // cartItems.
+    // cartItems.forEach((e) {
+    //   if (e.food.name == cartModel.food.name) old = e;
+    // });
+    for (var i = 0; i < cartItems.length; i++)
+      if (cartItems[i].food.name == cartModel.food.name) key = i;
+    // .map((e) {
+    //   print("tr-" + cartModel.food.name + " - " + e.food.name);
+    //   if (e.food.name == cartModel.food.name) old = e;
+    // });
+    print(key);
+    if (cartItems[key].quantity <= 1) {
+      // return;
+      cartItems.removeAt(key);
+    }
+    cartItems[key].quantity--;
+    notifyListeners();
+  }
+
   void increaseItem(CartItem cartModel) {
     cartItems[cartItems.indexOf(cartModel)].quantity++;
     notifyListeners();
