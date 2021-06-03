@@ -84,17 +84,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             Text('Order History', style: titleStyle),
             buildUserOrderHistoryList(),
-
-            SizedBox(height: 50),
-            TextButton(
-              onPressed: () {
-                auth.unsetToken();
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => StartPage()),
-                );
-              },
-              child: Text('Logout')
-            )
           ],
         ),
       ),
