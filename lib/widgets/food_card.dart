@@ -144,7 +144,7 @@ class _FoodCardState extends State<FoodCard>
           RatingBar(
             initialRating: 5.0,
             direction: Axis.horizontal,
-            itemCount: 5,
+            itemCount: food.rating.toInt(),
             itemSize: 14,
             unratedColor: Colors.black,
             itemPadding: EdgeInsets.only(right: 2.0),
