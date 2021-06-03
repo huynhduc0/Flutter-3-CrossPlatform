@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
@@ -5,9 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_food_ordering/constants/values.dart';
 import 'package:flutter_food_ordering/model/cart_model.dart';
+import 'package:flutter_food_ordering/model/user_model.dart';
+import 'package:flutter_food_ordering/pages/home_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
+import 'package:flutter_food_ordering/model/services/auth_serivce.dart';
+import 'package:flutter_food_ordering/model/services/order_service.dart';
+import 'package:stripe_payment/stripe_payment.dart';
 
 import '../credentials.dart';
 
@@ -22,33 +29,19 @@ class _BillPageState extends State<BillPage> with SingleTickerProviderStateMixin
   get month => DateFormat('MMMM').format(now);
   double oldTotal = 0;
   double total = 0;
+  UserDataProfile user;
+  MyCart cart;
+
+  AuthService auth = AuthService();
+  OrderService orderService = OrderService();
+  final storage = new FlutterSecureStorage();
 
   ScrollController scrollController = ScrollController();
   AnimationController animationController;
 
-  onCheckOutClick(MyCart cart) async {
-    try {
-      List<Map> data = List.generate(cart.cartItems.length, (index) {
-        return {
-          "id": cart.cartItems[index].food.id,
-          "quantity": cart.cartItems[index].quantity
-        };
-      }).toList();
-
-      var response = await Dio().post('$BASE_URL/api/order/food',
-          queryParameters: {"token": token}, data: data);
-      print(response.data);
-
-      if (response.data['status'] == 1) {
-        cart.clearCart();
-        Navigator.of(context).pop();
-      } else {
-        Toast.show(response.data['message'], context);
-      }
-    } catch (ex) {
-      print(ex.toString());
-    }
-  }
+  TextEditingController cardNumberController = new TextEditingController();
+  TextEditingController expYearController = new TextEditingController();
+  TextEditingController expMonthController = new TextEditingController();
 
   @override
   void initState() {
@@ -56,6 +49,26 @@ class _BillPageState extends State<BillPage> with SingleTickerProviderStateMixin
     AnimationController(vsync: this, duration: Duration(milliseconds: 200))
       ..forward();
     super.initState();
+    getUserFromApi();
+  }
+
+  void getUserFromApi() async {
+    orderService.getMe().then((value) => {
+      if(value != null) {
+        setState(() {
+          user = value;
+        }),
+      }
+    });
+
+    orderService.getPaymentToken().then((STRIPE_PAYMENT_KEY) => {
+      //stripe payment
+      StripePayment.setOptions(
+        StripeOptions(
+          publishableKey: STRIPE_PAYMENT_KEY,
+        )
+      ),
+    });
   }
 
   @override
@@ -66,7 +79,15 @@ class _BillPageState extends State<BillPage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    var cart = Provider.of<MyCart>(context);
+    setState(() {
+      cart = Provider.of<MyCart>(context);
+      oldTotal = total;
+      total = 0;
+      for (CartItem cart in cart.cartItems) {
+        total += cart.food.price * cart.quantity;
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mainColor,
@@ -86,15 +107,6 @@ class _BillPageState extends State<BillPage> with SingleTickerProviderStateMixin
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               ...buildHeader(),
-              //cart items list
-              // ListView.builder(
-              //   itemCount: cart.cartItems.length,
-              //   shrinkWrap: true,
-              //   controller: scrollController,
-              //   itemBuilder: (BuildContext context, int index) {
-              //     return buildCartItemList(cart, cart.cartItems[index]);
-              //   },
-              // ),
               buildShippingAddress(),
               buildBagSummary(),
               buildPaymentType(),
@@ -131,8 +143,27 @@ class _BillPageState extends State<BillPage> with SingleTickerProviderStateMixin
             fontWeight: FontWeight.bold,
           ),
         ),
-        onPressed: () {
-          onCheckOutClick(cart);
+        onPressed: () async {
+          PaymentMethod paymentMethod = PaymentMethod();
+          paymentMethod = await StripePayment.paymentRequestWithCardForm(
+            CardFormPaymentRequest(),
+          ).then((PaymentMethod paymentMethod) {
+            return paymentMethod;
+          }).catchError((e) {
+            print('Error Card: ${e.toString()}');
+          });
+
+          orderService.order(cart, total, paymentMethod.id).then((value) async => {
+            if(value == true) {
+              Toast.show('Order success', context),
+              cart.clearCart(),
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => MyHomePage()),
+              )
+            } else {
+              Toast.show('Order failed', context),
+            }
+          });
         },
         padding: EdgeInsets.symmetric(horizontal: 64, vertical: 12),
         color: mainColor,
@@ -219,7 +250,7 @@ class _BillPageState extends State<BillPage> with SingleTickerProviderStateMixin
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: new Text(
-                            "Anh Phang",
+                            (user != null && user.name != null) ? user.name : 'Your name',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -232,7 +263,7 @@ class _BillPageState extends State<BillPage> with SingleTickerProviderStateMixin
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "01 Chu Lai, phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
+                            (user != null && user.address != null) ? user.address : 'Your address',
                             textAlign: TextAlign.start,
                           ),
                         ),
@@ -320,76 +351,87 @@ class _BillPageState extends State<BillPage> with SingleTickerProviderStateMixin
                           ],
                         )
                     ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                      child: Row(
-                        children: [
-                          Flexible(
-                            flex: 3,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Iphone 12",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                textAlign: TextAlign.start,
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                              flex: 1,
-                              child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+
+                    ListView.builder(
+                      itemCount: cart.cartItems.length,
+                      shrinkWrap: true,
+                      controller: scrollController,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  flex: 3,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
                                     child: Text(
-                                      "\$999",
+                                      cart.cartItems[index].food.name,
                                       style: TextStyle(
-                                        color: Colors.grey
+                                        color: Colors.grey,
                                       ),
-                                    )
-                                  )
-                              )
-                          )
-                        ],
-                      )
-                    ),
-                    Padding(
-                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                        child: Row(
-                          children: [
-                            Flexible(
-                              flex: 3,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Quantity",
-                                  style: TextStyle(
-                                    color: Colors.grey,
+                                      textAlign: TextAlign.start,
+                                    ),
                                   ),
-                                  textAlign: TextAlign.start,
                                 ),
-                              ),
-                            ),
-                            Flexible(
-                                flex: 1,
-                                child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                        padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                        child: Text(
-                                          "x2",
-                                          style: TextStyle(
-                                              color: Colors.grey
-                                          ),
+                                Flexible(
+                                    flex: 2,
+                                    child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Padding(
+                                            padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                            child: Text(
+                                              "\$${cart.cartItems[index].food.price} x ${cart.cartItems[index].quantity}",
+                                              style: TextStyle(
+                                                  color: Colors.grey
+                                              ),
+                                            )
                                         )
                                     )
                                 )
+                              ],
                             )
-                          ],
-                        )
+                        );
+                      },
                     ),
+
+                    // Padding(
+                    //     padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    //     child: Row(
+                    //       children: [
+                    //         Flexible(
+                    //           flex: 3,
+                    //           child: Align(
+                    //             alignment: Alignment.centerLeft,
+                    //             child: Text(
+                    //               "Quantity",
+                    //               style: TextStyle(
+                    //                 color: Colors.grey,
+                    //               ),
+                    //               textAlign: TextAlign.start,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         Flexible(
+                    //             flex: 1,
+                    //             child: Align(
+                    //                 alignment: Alignment.centerRight,
+                    //                 child: Padding(
+                    //                     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                    //                     child: Text(
+                    //                       "x2",
+                    //                       style: TextStyle(
+                    //                           color: Colors.grey
+                    //                       ),
+                    //                     )
+                    //                 )
+                    //             )
+                    //         )
+                    //       ],
+                    //     )
+                    // ),
+
+                    SizedBox(height: 10),
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
                       child: Row(
@@ -415,7 +457,7 @@ class _BillPageState extends State<BillPage> with SingleTickerProviderStateMixin
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
                                 child: Text(
-                                  "\$1998",
+                                  "\$${total}",
                                   style: TextStyle(
                                       color: Colors.orange,
                                     fontWeight: FontWeight.bold
@@ -510,19 +552,19 @@ class _BillPageState extends State<BillPage> with SingleTickerProviderStateMixin
                         ],
                       )
                     ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: new Text(
-                          "Anh Phang",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    //   child: Align(
+                    //     alignment: Alignment.centerLeft,
+                    //     child: new Text(
+                    //       "Anh Phang",
+                    //       style: TextStyle(
+                    //         fontWeight: FontWeight.bold,
+                    //       ),
+                    //       textAlign: TextAlign.left,
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
                       child: Row(
@@ -532,7 +574,7 @@ class _BillPageState extends State<BillPage> with SingleTickerProviderStateMixin
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                "*** **** ***2424",
+                                "Credit card",
                                 textAlign: TextAlign.start,
                               ),
                             ),
@@ -564,109 +606,6 @@ class _BillPageState extends State<BillPage> with SingleTickerProviderStateMixin
                   ],
                 ),
               )
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-
-
-
-  Widget buildCartItemList(MyCart cart, CartItem cartModel) {
-    return Card(
-      margin: EdgeInsets.only(bottom: 16),
-      child: Container(
-        height: 100,
-        padding: EdgeInsets.all(8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(6)),
-              child: Image.network(
-                // '$BASE_URL/uploads/${cartModel.food.images[0]}',
-                cartModel.food.images,
-                fit: BoxFit.cover,
-                width: 100,
-                height: 100,
-              ),
-            ),
-            Flexible(
-              flex: 3,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    height: 45,
-                    child: Text(
-                      cartModel.food.name,
-                      style: titleStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      InkWell(
-                        customBorder: roundedRectangle4,
-                        onTap: () {
-                          cart.decreaseItem(cartModel);
-                          // animationController.reset();
-                          // animationController.forward();
-                        },
-                        child: Icon(Icons.remove_circle),
-                      ),
-                      Padding(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 2),
-                        child: Text('${cartModel.quantity}', style: titleStyle),
-                      ),
-                      InkWell(
-                        customBorder: roundedRectangle4,
-                        onTap: () {
-                          cart.increaseItem(cartModel);
-                          // animationController.reset();
-                          // animationController.forward();
-                        },
-                        child: Icon(Icons.add_circle),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    height: 45,
-                    width: 70,
-                    child: Text(
-                      '\$ ${cartModel.food.price}',
-                      style: titleStyle,
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      cart.removeAllInCart(cartModel.food);
-                      // animationController.reset();
-                      // animationController.forward();
-                    },
-                    customBorder: roundedRectangle12,
-                    child: Icon(Icons.delete_sweep, color: Colors.red),
-                  )
-                ],
-              ),
             ),
           ],
         ),

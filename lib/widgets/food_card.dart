@@ -119,7 +119,7 @@ class _FoodCardState extends State<FoodCard>
         children: <Widget>[
           Text(
             food.name,
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: titleStyle,
           ),
@@ -141,7 +141,7 @@ class _FoodCardState extends State<FoodCard>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          RatingBar(
+          RatingBar.builder(
             initialRating: 5.0,
             direction: Axis.horizontal,
             itemCount: food.rating.toInt(),

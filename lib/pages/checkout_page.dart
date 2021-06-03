@@ -1,15 +1,16 @@
 import 'dart:ui';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_food_ordering/constants/values.dart';
 import 'package:flutter_food_ordering/model/cart_model.dart';
+import 'package:flutter_food_ordering/pages/bill_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
-
 import '../credentials.dart';
+import 'package:flutter_food_ordering/model/services/order_service.dart';
 
 class CheckOutPage extends StatefulWidget {
   _CheckOutPageState createState() => _CheckOutPageState();
@@ -27,28 +28,36 @@ class _CheckOutPageState extends State<CheckOutPage>
   ScrollController scrollController = ScrollController();
   AnimationController animationController;
 
+  OrderService orderService = OrderService();
+
   onCheckOutClick(MyCart cart) async {
-    try {
-      List<Map> data = List.generate(cart.cartItems.length, (index) {
-        return {
-          "id": cart.cartItems[index].food.id,
-          "quantity": cart.cartItems[index].quantity
-        };
-      }).toList();
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => BillPage()),
+    );
 
-      var response = await Dio().post('$BASE_URL/api/order/food',
-          queryParameters: {"token": token}, data: data);
-      print(response.data);
-
-      if (response.data['status'] == 1) {
-        cart.clearCart();
-        Navigator.of(context).pop();
-      } else {
-        Toast.show(response.data['message'], context);
-      }
-    } catch (ex) {
-      print(ex.toString());
-    }
+    // try {
+    //   List<Map> data = List.generate(cart.cartItems.length, (index) {
+    //     return {
+    //       "id": cart.cartItems[index].food.id,
+    //       "quantity": cart.cartItems[index].quantity
+    //     };
+    //   }).toList();
+    //
+    //   var response = await Dio().post(
+    //     '$BASE_URL/api/order/save',
+    //     queryParameters: {"token": token}, data: data
+    //   );
+    //   print(response.data);
+    //
+    //   if (response.data['status'] == 1) {
+    //     cart.clearCart();
+    //     Navigator.of(context).pop();
+    //   } else {
+    //     Toast.show(response.data['message'], context);
+    //   }
+    // } catch (ex) {
+    //   print(ex.toString());
+    // }
   }
 
   @override
@@ -154,6 +163,7 @@ class _CheckOutPageState extends State<CheckOutPage>
       child: RaisedButton(
         child: Text('Checkout', style: titleStyle),
         onPressed: () {
+          // print(cart.items[0].quantity);
           onCheckOutClick(cart);
         },
         padding: EdgeInsets.symmetric(horizontal: 64, vertical: 12),
