@@ -165,7 +165,7 @@ class _BackdropAndRatingState extends State<BackdropAndRating> {
                         Container(
                           padding: EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Color(0xFF51CF66),
+                            color: mainColor,
                             borderRadius: BorderRadius.circular(2),
                           ),
                           child: Text(

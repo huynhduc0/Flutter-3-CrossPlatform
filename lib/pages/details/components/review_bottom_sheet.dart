@@ -9,6 +9,10 @@ import 'package:flutter_food_ordering/model/review_model.dart';
 import 'package:flutter_food_ordering/pages/checkout_page.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_food_ordering/model/services/rating_service.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:toast/toast.dart';
 
 import '../../../credentials.dart';
 
@@ -24,6 +28,14 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
   final Food food;
   Future<ReviewModel> reviewModels;
   bool loading = false;
+
+  final _formKey = GlobalKey<FormState>();
+  File imageFile;
+  int numberStar;
+  String title;
+  String content;
+
+  RatingService ratingService = RatingService();
 
   _ReviewBottomSheetState(this.food);
   @override
@@ -157,7 +169,9 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
           color: Colors.green,
           shape: StadiumBorder(),
           splashColor: Colors.white60,
-          onPressed: () => {},
+          onPressed: () => {
+            _showPicker(context)
+          },
           textColor: Colors.white,
           label: Text('Add review'),
         ),
@@ -197,7 +211,7 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
                         child: Image.network(
-                        reviews.reviews[index].profile_image,
+                        reviews.reviews[index].image,
                         fit: BoxFit.fill,
                       ),
                       ),
@@ -304,6 +318,251 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
         padding: EdgeInsets.symmetric(horizontal: 64, vertical: 12),
         color: mainColor,
         shape: StadiumBorder(),
+      ),
+    );
+  }
+
+  // RATING
+  /// Get from gallery
+  _getFromGallery() async {
+    PickedFile pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        imageFile = File(pickedFile.path);
+      });
+    }
+    if(imageFile != null) {
+      showDiaLogAddReview(context);
+    }
+  }
+
+  /// Get from Camera
+  _getFromCamera() async {
+    PickedFile pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        imageFile = File(pickedFile.path);
+      });
+    }
+    if(imageFile != null) {
+      showDiaLogAddReview(context);
+    }
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Library'),
+                      onTap: () {
+                        _getFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      _getFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  void showDiaLogAddReview(context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        // title: const Text('Update avatar'),
+        // content: const Text('Are you sure you want to delete this address?'),
+        scrollable: true,
+        actions: <Widget>[
+          (imageFile != null) ?
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 150,
+            child: Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                height: 150,
+                child: ClipRRect(
+                  child: Image.file(imageFile, fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+          ) :
+          Container(
+            width: MediaQuery.of(context).size.width,
+            child: Align(
+              alignment: Alignment.center,
+              child: InkWell(
+                onTap: (){
+                  _showPicker(context);
+                },
+                child: new Container(
+                  width: 300.0,
+                  child: Container(
+                    height: 150,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage("assets/images/Default_Thumbnail.jpg"),
+                            fit: BoxFit.cover
+                        )
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          SizedBox(height: 10),
+          Container(
+              width: MediaQuery.of(context).size.width,
+              child: Align(
+                child: RatingBar.builder(
+                  initialRating: 0,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: false,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {
+                    // print(rating);
+                    setState(() {
+                      numberStar = rating.toInt();
+                    });
+                  },
+                ),
+              )
+          ),
+
+          SizedBox(height: 10),
+          Flexible(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  buildFormFieldTitle(),
+                  buildFormFieldReview(),
+                ],
+              ),
+            ),
+          ),
+
+          SizedBox(height: 10),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text('Cancel', style: TextStyle(color: Colors.red),),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    ratingService.addRating(imageFile, title, content, numberStar, widget.food.v).then((result) => {
+                      if(result == true) {
+                        Toast.show('Add review success', context),
+                        Navigator.of(context).pop(),
+                        setState(() {
+                          // initPage();
+                        }),
+                      } else {
+                        Toast.show('Please try again later', context),
+                      }
+                    });
+                  }
+                },
+                child: const Text(
+                  'Add',
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  TextFormField buildFormFieldReview() {
+    return TextFormField(
+      maxLines: null,
+      keyboardType: TextInputType.multiline,
+      onSaved: (newValue) => content = newValue,
+      showCursor: true,//add this line
+      // readOnly: true,
+      onChanged: (value) {
+        setState(() {
+          content = value;
+        });
+        return null;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Please enter your review";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Write a review",
+        hintText: "Write a review...",
+        // If  you are using latest version of flutter then lable text and hint text shown like this
+        // if you r using flutter less then 1.20.* then maybe this is not working properly
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        // suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+      ),
+    );
+  }
+
+  TextFormField buildFormFieldTitle() {
+    return TextFormField(
+      maxLines: null,
+      keyboardType: TextInputType.multiline,
+      onSaved: (newValue) => title = newValue,
+      showCursor: true,//add this line
+      // readOnly: true,
+      onChanged: (value) {
+        setState(() {
+          title = value;
+        });
+        return null;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Please enter title";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Write title",
+        hintText: "Write a title...",
+        // If  you are using latest version of flutter then lable text and hint text shown like this
+        // if you r using flutter less then 1.20.* then maybe this is not working properly
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        // suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
       ),
     );
   }
