@@ -39,9 +39,8 @@ class Food {
 
   factory Food.fromJson(Map<String, dynamic> json) => Food(
         // images: String.from(json["images"].map((x) => x)),
-        // images: json["images"],
-        images:
-            "https://i1.wp.com/www.eatthis.com/wp-content/uploads/2020/12/unhealthiest-foods-planet.jpg?resize=640%2C360&ssl=1",
+        images: json["images"],
+        // images: "https://i1.wp.com/www.eatthis.com/wp-content/uploads/2020/12/unhealthiest-foods-planet.jpg?resize=640%2C360&ssl=1",
         id: json["_id"],
         name: json["name"],
         description: json["description"],

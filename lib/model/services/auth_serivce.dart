@@ -68,7 +68,7 @@ class AuthService {
           }
       );
 
-      print('response: ${response.data.toString()}');
+      // print('response: ${response.data.toString()}');
 
       this.storeToken(response.data["token"]);
       return UserDataProfile.fromMap(response.data["user"]);

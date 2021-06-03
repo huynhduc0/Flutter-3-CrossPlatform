@@ -2,7 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/constants/values.dart';
 import 'package:flutter_food_ordering/model/order_model.dart';
+import 'package:flutter_food_ordering/pages/start_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_food_ordering/model/services/auth_serivce.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class UserProfilePage extends StatefulWidget {
 class _UserProfilePageState extends State<UserProfilePage> {
   Future<Response> user;
   Future<OrderModel> orders;
+  AuthService auth = AuthService();
 
   Future<Response> fetchUserData() async {
     try {
@@ -81,6 +84,17 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             Text('Order History', style: titleStyle),
             buildUserOrderHistoryList(),
+
+            SizedBox(height: 50),
+            TextButton(
+              onPressed: () {
+                auth.unsetToken();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StartPage()),
+                );
+              },
+              child: Text('Logout')
+            )
           ],
         ),
       ),

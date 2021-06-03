@@ -7,6 +7,7 @@ import io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingPlugin;
 import com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin;
 import com.it_nomads.fluttersecurestorage.FlutterSecureStoragePlugin;
 import io.flutter.plugins.googlesignin.GoogleSignInPlugin;
+import de.jonasbark.stripepayment.StripePaymentPlugin;
 
 /**
  * Generated file. Do not edit.
@@ -22,6 +23,7 @@ public final class GeneratedPluginRegistrant {
     FlutterLocalNotificationsPlugin.registerWith(registry.registrarFor("com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin"));
     FlutterSecureStoragePlugin.registerWith(registry.registrarFor("com.it_nomads.fluttersecurestorage.FlutterSecureStoragePlugin"));
     GoogleSignInPlugin.registerWith(registry.registrarFor("io.flutter.plugins.googlesignin.GoogleSignInPlugin"));
+    StripePaymentPlugin.registerWith(registry.registrarFor("de.jonasbark.stripepayment.StripePaymentPlugin"));
   }
 
   private static boolean alreadyRegisteredWith(PluginRegistry registry) {

@@ -4,6 +4,16 @@ class UserDataProfile {
   String phoneNumber;
   String email;
   String avatar;
+  String address;
+
+  UserDataProfile({
+    this.id,
+    this.avatar,
+    this.email,
+    this.phoneNumber,
+    this.name,
+    this.address,
+  });
 
   UserDataProfile.fromMap(Map<String, dynamic> data) {
     name = data["name"];
@@ -11,6 +21,7 @@ class UserDataProfile {
     email = data["email"];
     avatar = data["avatar"];
     id = data["id"];
+    address = data['address'];
   }
 
   Map<String, dynamic> toMap() {
@@ -19,7 +30,8 @@ class UserDataProfile {
       'phone': phoneNumber,
       'email': email,
       'avatar': avatar,
-      'id':id
+      'id':id,
+      'address': address
     };
   }
 }
