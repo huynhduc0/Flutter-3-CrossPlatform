@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<FoodModel> foodModels;
   Future<FoodCategoryModel> foodCategories;
   Future<FoodModel> fetchAllFoods() async {
-    AuthService auth = AuthService();
+   
    
     setState(() {
       foodModels = null;
