@@ -29,29 +29,37 @@ class _NotificationCardState extends State<NotificationCard>
             side: BorderSide(color: Colors.white70, width: 1),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            ListTile(
-              leading: Icon(
-                Icons.fastfood,
-                color: Color(0xFFF17808),
-              ),
-              trailing: Text(notification.createdAt.day.toString() + '/' + notification.createdAt.month.toString(),
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.normal,
-                      fontFamily: "Poppins")),
-              title: Text(notification.title,
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "Poppins")),
-              subtitle: Text(notification.content,
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.normal,
-                      fontFamily: "Poppins")),
-            )
-          ]),
+          child: InkWell(
+              splashColor: Colors.blue.withAlpha(30),
+              onTap: () {
+                print('Card tapped.');
+              },
+              child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                ListTile(
+                  leading: Icon(
+                    Icons.fastfood,
+                    color: Color(0xFFF17808),
+                  ),
+                  trailing: Text(
+                      notification.createdAt.day.toString() +
+                          '/' +
+                          notification.createdAt.month.toString(),
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: "Poppins")),
+                  title: Text(notification.title,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Poppins")),
+                  subtitle: Text(notification.content,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: "Poppins")),
+                )
+              ])),
         ),
       ),
     );

@@ -72,10 +72,11 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
             return Container(
+              height: MediaQuery.of(context).size.height * 0.8,
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   Container(
                     alignment: Alignment.center,
@@ -89,6 +90,15 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
                   ),
                   buildTitle(food.name),
                   Divider(),
+                  // RaisedButton.icon(
+                  //   icon: Icon(Icons.add),
+                  //   color: Colors.green,
+                  //   shape: StadiumBorder(),
+                  //   splashColor: Colors.white60,
+                  //   onPressed: () => {},
+                  //   textColor: Colors.white,
+                  //   label: Text('Add review'),
+                  // ),
                   if (snapshot.data.reviews.length <= 0)
                     noItemWidget()
                   else
@@ -141,7 +151,7 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Text('Reviews on this food', style: headerStyle),
+        Text('REVIEW', style: headerStyle.copyWith(fontSize: 20), textAlign: TextAlign.center,),
         RaisedButton.icon(
           icon: Icon(Icons.add),
           color: Colors.green,
@@ -149,7 +159,7 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
           splashColor: Colors.white60,
           onPressed: () => {},
           textColor: Colors.white,
-          label: Text('Add a review'),
+          label: Text('Add review'),
         ),
       ],
     );
@@ -179,11 +189,19 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
               color: Colors.white,
               child: Row(
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.33,
-                    child: Image.network(
-                      reviews.reviews[index].profile_image,
-                      fit: BoxFit.fill,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.width * 0.2,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: Image.network(
+                        reviews.reviews[index].profile_image,
+                        fit: BoxFit.fill,
+                      ),
+                      ),
+                      
                     ),
                   ),
                   SizedBox(
@@ -217,11 +235,11 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                                  EdgeInsets.all(8),
                               child: CircleAvatar(
-                                //     // backgroundImage: NetworkImage('$BASE_URL/uploads/${cart.cartItems[index].food.images[0]}')),
+                                    // backgroundImage: NetworkImage('$BASE_URL/uploads/${cart.cartItems[index].food.images[0]}')),
                                 backgroundImage: NetworkImage(
-                                    reviews.reviews[index].profile_image),
+                                    reviews.reviews[index].profile_image,),
                               ),
                             ),
                           ],
