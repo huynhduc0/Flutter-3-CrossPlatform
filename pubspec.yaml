@@ -26,6 +26,10 @@ dependencies:
   carousel_pro: ^1.0.0
   carousel_slider: ^3.0.0
   smooth_star_rating: ^1.0.4
+  device_info: ^2.0.2
+  firebase_messaging: ^10.0.0
+  firebase_core: ^1.2.0
+  flutter_local_notifications: ^6.0.0
 
 dev_dependencies:
   flutter_test:

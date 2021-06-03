@@ -2,14 +2,42 @@ import 'dart:convert';
 // ignore: avoid_web_libraries_in_flutter
 // import 'dart:html';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_food_ordering/credentials.dart';
 import 'package:flutter_food_ordering/model/user_model.dart';
 // import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:io' show Platform;
+import 'package:device_info/device_info.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 class AuthService {
   final storage = new FlutterSecureStorage();
 
+  // Get detail of device
+  Future<List<String>> getDeviceDetails() async {
+    String deviceName;
+    String deviceVersion;
+    String identifier;
+    final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+    try {
+      if (Platform.isAndroid) {
+        var build = await deviceInfoPlugin.androidInfo;
+        deviceName = build.model;
+        deviceVersion = build.version.toString();
+        identifier = build.androidId;  //UUID for Android
+      } else if (Platform.isIOS) {
+        var data = await deviceInfoPlugin.iosInfo;
+        deviceName = data.name;
+        deviceVersion = data.systemVersion;
+        identifier = data.identifierForVendor;  //UUID for iOS
+      }
+    } on PlatformException {
+      print('Failed to get platform version');
+    }
+
+    return [deviceName, deviceVersion, identifier];
+  }
 
   //Sign in with Google
   Future<UserDataProfile> loginWithGoogle(String token) async {
@@ -22,18 +50,34 @@ class AuthService {
       device = "ios";
     }
 
-    print(GOOGLE_LOGIN_URL);
-    final response = await dio.post(
-      GOOGLE_LOGIN_URL,
-      data: {
-        "id_token": token,
-        "device_type": device
-      }
-    );
-    print(response.data.toString());
+    String deviceId;
+    await getDeviceDetails().then((deviceDetails) => {
+      deviceId = deviceDetails[2],
+    });
 
-    this.storeToken(response.data["token"]);
-    return UserDataProfile.fromMap(response.data["user"]);
+    String pushToken = await FirebaseMessaging.instance.getToken();
+
+    try {
+      final response = await dio.post(
+          GOOGLE_LOGIN_URL,
+          data: {
+            "id_token": token,
+            "device_type": device,
+            "device_id": deviceId,
+            "push_token": pushToken
+          }
+      );
+
+      print('response: ${response.data.toString()}');
+
+      this.storeToken(response.data["token"]);
+      return UserDataProfile.fromMap(response.data["user"]);
+    } catch (e) {
+      print(e);
+      if (e is DioError) {
+        return e.response.data['message'];
+      }
+    }
   }
 
   //Get UID
