@@ -12,6 +12,7 @@ class Body extends StatelessWidget {
   final Food food;
 
   const Body({Key key, this.food}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     timeDilation = 1.6;
@@ -24,7 +25,7 @@ class Body extends StatelessWidget {
           BackdropAndRating(size: size, food: food),
           SizedBox(height: kDefaultPadding / 2),
           TitleDurationAndFabBtn(food: food),
-          // Genres(food: food),
+          //
           Padding(
             padding: EdgeInsets.symmetric(
               vertical: kDefaultPadding / 2,
@@ -65,7 +66,8 @@ class Body extends StatelessWidget {
               ),
             ),
           ),
-          // CastAndCrew(casts: food.cast),
+          Genres(food: food),
+          // CastAndCrew(food: food.cast),
         ],
       ),
     );
