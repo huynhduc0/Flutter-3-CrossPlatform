@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/constants/values.dart';
 import 'package:flutter_food_ordering/model/cart_model.dart';
 import 'package:flutter_food_ordering/model/food_model.dart';
+import 'package:flutter_food_ordering/model/services/auth_serivce.dart';
 import 'package:flutter_food_ordering/pages/search_page.dart';
 import 'package:flutter_food_ordering/pages/user_profile.dart';
 import 'package:flutter_food_ordering/widgets/cart_bottom_sheet.dart';
@@ -26,8 +27,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<FoodModel> foodModels;
   Future<FoodCategoryModel> foodCategories;
-
   Future<FoodModel> fetchAllFoods() async {
+    AuthService auth = AuthService();
+   
     setState(() {
       foodModels = null;
     });

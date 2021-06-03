@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/constants/values.dart';
+import 'package:flutter_food_ordering/model/services/auth_serivce.dart';
 
 class NotificationPage extends StatefulWidget {
   @override
@@ -7,6 +8,13 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+  fetchAllNotification() async {
+    AuthService auth = AuthService();
+    String tokenF = await auth.getToken();
+    print(tokenF);
+
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +38,7 @@ class _NotificationPageState extends State<NotificationPage> {
                       fontWeight: FontWeight.bold,
                       fontFamily: "Poppins")),
             ),
+            
             buildNotification("title", "content", 1),
             buildNotification("title", "content", 1),
             buildNotification("title", "content", 1)
