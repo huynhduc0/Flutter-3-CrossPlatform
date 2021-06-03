@@ -141,7 +141,7 @@ class _FoodCardState extends State<FoodCard>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          RatingBar(
+          RatingBar.builder(
             initialRating: 5.0,
             direction: Axis.horizontal,
             itemCount: 5,
