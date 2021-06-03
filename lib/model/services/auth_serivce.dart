@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_food_ordering/credentials.dart';
 import 'package:flutter_food_ordering/model/user_model.dart';
-// import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:io' show Platform;
 import 'package:device_info/device_info.dart';
@@ -43,12 +43,13 @@ class AuthService {
   Future<UserDataProfile> loginWithGoogle(String token) async {
     var dio = Dio();
 
-    String device = "";
-    if (Platform.isAndroid) {
-      device = "android";
-    } else if (Platform.isIOS) {
-      device = "ios";
-    }
+    // String device = "";
+    // if (Platform.isAndroid) {
+    //   device = "android";
+    // } else if (Platform.isIOS) {
+    //   device = "ios";
+    // }
+    String device = "web";
 
     String deviceId;
     await getDeviceDetails().then((deviceDetails) => {
@@ -92,6 +93,7 @@ class AuthService {
     UserDataProfile user = await this.getUser().then((value) => value);
     return user;
   }
+
   //Get Email
   Future<String> getCurrentEmail() async {
     UserDataProfile user = await this.getUser().then((value) => value);
@@ -149,8 +151,4 @@ class AuthService {
 
     return true;
   }
-  
-
 }
-
-
