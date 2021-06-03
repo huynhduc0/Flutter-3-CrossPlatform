@@ -22,6 +22,8 @@ class _FoodCardState extends State<FoodCard>
 
   @override
   void initState() {
+    // print("1231313312313123");
+    // print(widget.food.updatedAt.toUtc());
     super.initState();
   }
 

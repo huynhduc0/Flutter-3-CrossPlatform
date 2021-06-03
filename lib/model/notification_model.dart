@@ -1,40 +1,39 @@
 class NotificationModel{
   int status;
-  List<Notification> notifications;
+  List<Notifications> notifications;
 
   NotificationModel({this.status, this.notifications});
  factory NotificationModel.fromJson(Map<String, dynamic> json) => NotificationModel(
         status: json["status"],
-        notifications: List<Notification>.from(json["notifications"].map((x) => Notification.fromJson(x))),
+        notifications: List<Notifications>.from(json["notifications"].map((x) => Notifications.fromJson(x))),
       );
 }
 
-
-class Notification{
+class Notifications{
   int id;
   String title;
   String content;
-  int user_id;
-  DateTime created_at;
-  DateTime updated_at;
+  int userId;
+  DateTime createdAt;
+  DateTime updatedAt;
   int isRead;
 
-  Notification({
+  Notifications({
     this.id,
     this.title,
     this.content,
-    this.user_id,
-    this.created_at,
-    this.updated_at,
+    this.userId,
+    this.createdAt,
+    this.updatedAt,
     this.isRead,
   });
-  factory Notification.fromJson(Map<String, dynamic> json) => Notification(
+  factory Notifications.fromJson(Map<String, dynamic> json) => Notifications(
     id: json["id"],
     title: json["title"],
     content: json["content"],
-    user_id: json["user_id"],
-    created_at: json["created_at"],
-    updated_at: json["updated_at"],
+    userId: json["user_id"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
     isRead: json["isRead"],
   );
 }
