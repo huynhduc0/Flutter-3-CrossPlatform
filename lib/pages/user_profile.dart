@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/constants/values.dart';
 import 'package:flutter_food_ordering/model/order_model.dart';
 import 'package:flutter_food_ordering/model/services/auth_serivce.dart';
+import 'package:flutter_food_ordering/pages/start_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
@@ -21,10 +22,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  AuthService auth = AuthService();
 
   Future<Response> fetchUserData() async {
     try {
-      AuthService auth = AuthService();
       String token = await auth.getToken();
       Dio dio = new Dio();
       dio.options.headers['Content-Type'] = 'application/json';
@@ -40,25 +41,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
       throw Exception(ex.toString());
     }
   }
-
-  // Future<OrderModel> fetchUserOrderHistory() async {
-  //   try {
-  //     AuthService auth = AuthService();
-  //     String token = await auth.getToken();
-  //     Dio dio = new Dio();
-  //     dio.options.headers['Content-Type'] = 'application/json';
-  //     dio.options.headers["Authorization"] = "Bearer ${token}";
-  //     var response = await dio.get('$BASE_URL/api/order/user');
-  //     if (response.data['status'] == 1) {
-  //       return OrderModel.fromJson(response.data);
-  //     } else {
-  //       return null;
-  //     }
-  //   } catch (ex) {
-  //     print(ex.toString());
-  //     return null;
-  //   }
-  // }
 
   @override
   void initState() {
@@ -87,7 +69,35 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             Spacer(),
             FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Logout"),
+                      content: Text("Are you sure you want to log out?"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("No"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
+                          child: Text("Yes"),
+                          onPressed: () async => {
+                            auth.unsetToken(),
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => StartPage()),
+                                (Route<dynamic> route) => false),
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
               child: Text(
                 'LOGOUT',
                 style: TextStyle(
@@ -236,7 +246,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           data: profileData);
 
                       if (profileResponse.data['status'] == 1) {
-                        print(profileResponse);
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(profileResponse.data['message']);
                       } else {
                         throw Exception(response.data['message']);
                       }
@@ -260,49 +271,4 @@ class _UserProfilePageState extends State<UserProfilePage> {
       ),
     );
   }
-
-  // Widget buildUserOrderHistoryList() {
-  //   return FutureBuilder<OrderModel>(
-  //     future: orders,
-  //     builder: (BuildContext context, AsyncSnapshot<OrderModel> snapshot) {
-  //       if (snapshot.hasData) {
-  //         if (snapshot.data.order.length < 1) return Text("Nothing");
-  //         return ListView.builder(
-  //           primary: false,
-  //           itemCount: snapshot.data.order.length,
-  //           shrinkWrap: true,
-  //           itemBuilder: (BuildContext context, int index) {
-  //             Order order = snapshot.data.order[index];
-  //             return buildOrderItem(order);
-  //           },
-  //         );
-  //       }
-  //       return Center(child: CircularProgressIndicator());
-  //     },
-  //   );
-  // }
-
-  // Widget buildOrderItem(Order order) {
-  //   return Card(
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: <Widget>[
-  //         Container(
-  //           padding: EdgeInsets.only(left: 16, top: 16),
-  //           child: Text(
-  //               'Order Date: ' + DateFormat().format(order.orderDate.toLocal()),
-  //               style: titleStyle2),
-  //         ),
-  //         ...order.detail.map((item) {
-  //           return ListTile(
-  //             leading: Icon(Icons.fastfood),
-  //             trailing: Text('Price: ${item.food.price} \$'),
-  //             title: Text(item.food.name),
-  //             subtitle: Text('Quantity: ${item.quantity}'),
-  //           );
-  //         }).toList()
-  //       ],
-  //     ),
-  //   );
-  // }
 }
