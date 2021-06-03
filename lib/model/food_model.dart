@@ -14,11 +14,11 @@ class FoodModel {
 
 class Food {
   String images;
-  String id;
+  int id;
   String name;
   String description;
   double price;
-  int rating;
+  double rating;
   Shop shop;
   DateTime createdAt;
   DateTime updatedAt;
@@ -42,13 +42,13 @@ class Food {
         images: json["images"],
         // images:
         //     "https://i1.wp.com/www.eatthis.com/wp-content/uploads/2020/12/unhealthiest-foods-planet.jpg?resize=640%2C360&ssl=1",
-        id: json["_id"],
+        id: json["id"],
         name: json["name"],
         description: json["description"],
         price: json["price"].toDouble(),
-        rating: json["rating"],
-        // shop: Shop(id: "1",name: "1",email: "1"),
-        shop: Shop.fromJson(json["shop"]),
+        // rating: json["rating"],
+        shop: Shop(id: 1, name: "1", email: "1"),
+        // shop: Shop.fromJson(json["shop"]),
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         v: json["id"],

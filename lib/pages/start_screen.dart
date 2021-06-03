@@ -41,12 +41,10 @@ class _StartPageState extends State<StartPage> {
           .then((result) => {
                 result.authentication.then((googleKey) {
                   print("idToken");
-                  log(googleKey.idToken);
-                  print("212312312123123");
-                  // print(googleKey.idToken);
-                  // print(_googleSignIn.currentUser.displayName);
+                  print(googleKey.idToken);
                   _accessToken = googleKey.idToken;
-                  print(_accessToken);
+                  print("+++++++++++++++++");
+                  debugPrint(_accessToken, wrapWidth: 1000000);
                   UserDataProfile us = auth
                           .loginWithGoogle(_accessToken)
                           .then((user) => {auth.storeUser(user)})
@@ -108,4 +106,8 @@ class _StartPageState extends State<StartPage> {
       ),
     );
   }
+}
+void printWrapped(String text) {
+  final pattern = RegExp('.{1,80000}'); // 800 is the size of each chunk
+  pattern.allMatches(text).forEach((match) => print(match.group(0)));
 }

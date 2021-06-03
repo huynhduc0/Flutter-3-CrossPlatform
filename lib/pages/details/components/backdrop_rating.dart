@@ -1,18 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_food_ordering/constants/values.dart';
 import 'package:flutter_food_ordering/model/food_model.dart';
+import 'package:flutter_food_ordering/pages/details/components/review_bottom_sheet.dart';
+import 'package:flutter_food_ordering/widgets/cart_bottom_sheet.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BackdropAndRating extends StatelessWidget {
+  final Size size;
+  final Food food;
   const BackdropAndRating({
     Key key,
     @required this.size,
     @required this.food,
   }) : super(key: key);
 
-  final Size size;
-  final Food food;
+  showCart(context) {
 
+    showModalBottomSheet(
+      shape: roundedRectangle40,
+      context: context,
+      builder: (context) => CartBottomSheet(),
+    );
+  }
+  showReview(context,food) {
+    print(food.id.toString());
+    showModalBottomSheet(
+      shape: roundedRectangle40,
+      context: context,
+        isScrollControlled:true,
+      builder: (context) => ReviewBottomSheet(food: food),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     print("hero tag ${food.name}");
@@ -75,29 +93,37 @@ class BackdropAndRating extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SvgPicture.asset("icons/star_fill.svg"),
-                        SizedBox(height: kDefaultPadding / 4),
-                        RichText(
-                          text: TextSpan(
-                            style: TextStyle(color: Colors.black),
-                            children: [
-                              TextSpan(
-                                text: "${food.rating}/",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              TextSpan(text: "10\n"),
-                              TextSpan(
-                                text: "69 times",
-                                style: TextStyle(color: kTextLightColor),
-                              ),
-                            ],
+                    GestureDetector(
+                      onTap: ()=> showReview(context,this.food),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          // SvgPicture.asset("icons/star_fill.svg"),
+                          SizedBox(height: kDefaultPadding / 4),
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(color: Colors.black),
+                              children: [
+                                TextSpan(
+                                  text: "${food.rating}/",
+                                  style: TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                                TextSpan(text: "5\n"),
+                                TextSpan(
+                                  text: "69 times\n",
+                                  style: TextStyle(color: kTextLightColor),
+                                ),
+                                TextSpan(
+                                  text: "View →",
+                                  style: TextStyle(color: kTextLightColor).copyWith(fontWeight: FontWeight.bold),
+                                ),
+
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     // Rate this
                     Column(
@@ -147,7 +173,36 @@ class BackdropAndRating extends StatelessWidget {
             ),
           ),
           // Back Button
-          SafeArea(child: BackButton()),
+          SafeArea(
+            child: Row(
+              children: <Widget>[
+                IconButton(
+                  icon: new Icon(Icons.arrow_back, color: Colors.orange),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                Spacer(),
+                Stack(
+                  children: <Widget>[
+                    IconButton(icon: Icon(Icons.shopping_cart), onPressed: ()=> showCart(context)),
+                    Positioned(
+                      right: 0,
+                      child: Container(
+                        // color: ,
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(4),
+                        decoration:
+                        BoxDecoration(shape: BoxShape.circle, color: mainColor),
+                        child: Text(
+                          '',
+                          style: TextStyle(fontSize: 12, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            ),
         ],
       ),
     );
