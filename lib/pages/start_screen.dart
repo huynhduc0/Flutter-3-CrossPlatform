@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:ui';
-
+import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -22,18 +22,39 @@ class StartPage extends StatefulWidget {
   _StartPageState createState() => _StartPageState();
 }
 
+String GOOGLE_LOGIN_KEY_WITH_DEVICE;
+
 class _StartPageState extends State<StartPage> {
   AuthService auth = AuthService();
   GoogleSignInAccount _currentUser;
   String _accessToken;
+
+  @override
+  initState() {
+    super.initState();
+    checkDevice();
+  }
+
   GoogleSignIn _googleSignIn = GoogleSignIn(
     // Optional clientId
-    clientId: GOOGLE_LOGIN_KEY,
+    clientId: GOOGLE_LOGIN_KEY_WITH_DEVICE,
     scopes: <String>[
       'email',
       // 'https://www.googleapis.com/auth/contacts.readonly',
     ],
   );
+
+  Future checkDevice() {
+    if (Platform.isAndroid) {
+      setState(() {
+        GOOGLE_LOGIN_KEY_WITH_DEVICE = GOOGLE_LOGIN_KEY_ANDROID;
+      });
+    } else if (Platform.isIOS) {
+      setState(() {
+        GOOGLE_LOGIN_KEY_WITH_DEVICE = GOOGLE_LOGIN_KEY;
+      });
+    }
+  }
 
   Future<void> _handleSignIn() async {
     try {
